@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>树结构</title>
+
+    <link rel="stylesheet" href="../css/common/include.css">
+    <script  language="javascript" type="text/javascript"  src="../js/common/include.js"></script>
+
+</head>
+
+<body id="body">
+
+<div id="navigation"></div>
+
+<div class="row" style="margin-top: 70px;height: 560px" >
+    <div class="col-md-2" >
+        <div style="overflow-x:scroll;overflow-y:scroll">
+            <div id="regionZTree" class="ztree">
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2" >
+        <div style="overflow-x:scroll;overflow-y:scroll">
+            <ul id="regionZTree1" class="ztree">
+            </ul>
+        </div>
+    </div>
+    <div class="col-md-10 text-center">
+        <h1>工作台</h1>
+    </div>
+</div>
+
+
+<script>
+
+ function onSelected(event, treeId, treeNode) {
+    alert('点击'+treeNode.name);
+ };
+
+  function initTree(){
+       var zNodes = [
+                   //注意，数据中的 name 必须与 settingss 中key 中定义的name一致，否则找不到
+                   {id:1,parentId:0,name:"父节点1", open:false,
+                                                            children:[
+                                                                        {id:11,parentId:1,name:"子节点11"},
+                                                                        {id:12,parentId:1,name:"子节点12",
+                                                                                        children:[
+                                                                                                    {id:121,parentId:1,name:"子节点121"},
+                                                                                                    {id:122,parentId:1,name:"子节点122"}
+                                                                                        ]}
+                                                            ]
+                   },
+                   {id:2,parentId:0,name:"父节点2", open:false, children:[
+                                                            {id:21,parentId:2,name:"子节点21"},
+                                                            {id:22,parentId:2,name:"子节点22"}
+                                                            ]
+                   }
+                   ];
+
+
+        var tree = ZTreeInit("regionZTree",zNodes);
+
+         var zNodes1 = [ {id:1,parentId:0,name:"节点1", open:false,children:[]}]
+
+        var tree1 = ZTreeInit("regionZTree1",zNodes1,-1,"/tree/test.do","/rename.do","/remove.do","/add.do");
+  };
+
+  $(function () {
+        initPage();
+        $('#tree').css('font-size','25px');
+        initTree();
+  });
+
+</script>
+
+</body>
+</html>

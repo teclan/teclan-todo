@@ -1,0 +1,11 @@
+[
+
+  {"id": "home","name": "首页","dropdown": false,"url": "/resource/home/home.html"},
+  {"id": "user","name": "用户","dropdown": false,"url": "/resource/user/userList.html"},
+  {"id": "todo","name": "任务","dropdown": false,"url": "/resource/todo/todoList.html"},
+  {"id": "avatar","name": "个人中心","dropdown": true,"url": "#",
+                  "dropdown_items":[
+                    {"id": "profile","name": "个人资料","dropdown": false,"url":""},
+                    {"id": "logout","name": "登   出","dropdown": false,"url":"/?from-logout=1"}]
+  }
+]

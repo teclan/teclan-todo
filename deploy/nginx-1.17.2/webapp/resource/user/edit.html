@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+
+
+    <link rel="stylesheet" href="../css/common/include.css">
+
+    <script  language="javascript" type="text/javascript"  src="../js/common/include.js"></script>
+
+    <script  language="javascript" type="text/javascript"  src="../user/user.js"></script>
+
+    <title>用户编辑</title>
+
+
+</head>
+<body>
+
+<script type="text/javascript">
+
+    $(function () {
+        check();
+        $("#home").attr("href",BASE_URL+"/resource/home/home.html");
+        $("#user").attr("href",BASE_URL+"/resource/user/userList.html");
+        $('#user').css('font-size','25px');
+        getById();
+
+
+    });
+
+function update(){
+ var bootstrapValidator = $("#defaultForm").data('bootstrapValidator');
+    bootstrapValidator.resetForm();
+   bootstrapValidator.validate();
+   if(!bootstrapValidator.isValid()){
+     // 如果有验证未通过的项，给出提示，且终止后续逻辑
+     showMessageWithTimeOut('表单有验证失败的项，请先处理后再执行此操作!',3);
+
+     return;
+   }
+
+  var id= $('#id').val();
+  var name= $('#name').val();
+  var phone= $('#phone').val();
+  var id_card= $('#id_card').val();
+
+  var json = '{"id":"'+id+'","name":"'+name+'","phone":"'+phone+'","id_card":"'+id_card+'"}';
+  doUpdate(json);
+};
+
+function check(){
+
+         $('#defaultForm').bootstrapValidator({
+
+                    feedbackIcons: {
+                        　　valid: 'glyphicon glyphicon-ok',
+                        　　invalid: 'glyphicon glyphicon-remove',
+                        　　validating: 'glyphicon glyphicon-refresh'
+                    },
+                    fields: {
+                        name: {
+                            validators: {
+                                notEmpty: {
+                                    message: '用户名不能为空'
+                                }
+                            }
+                        },
+                        phone: {
+                            validators: {
+                                notEmpty: {
+                                    message: '电话不能为空'
+                                }
+                            }
+                        },
+                        id_card: {
+                            validators: {
+                                notEmpty: {
+                                    message: '证件号不能为空'
+                                }
+                            }
+                        }
+                    }
+                });
+};
+
+
+</script>
+
+<nav class="nav navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div id="menu" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <a id="home" chref="" class="navbar-brand">首页</a>
+                <li><a id="user" class="navbar-brand active"  href="">用户</a></li>
+                <li><a class="navbar-brand" href="#">任务</a></li>
+                <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    three<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">first</a></li>
+                        <li><a href="#">second</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+<div  class="panel panel-default" style="margin-left:150px; padding-left:40px;padding-top:10px;padding-bottom:10px;width: 1000px;">
+
+
+    <div  style="margin-left:100px; margin-top:100px; margin-right:100px; margin-bottom:60px; padding-top:10px">
+
+        <h2 class="label label-info" style="font-size:20px;">用户/编辑</h2>
+
+        <div style="padding-top:30px;" >
+
+            <form id="defaultForm" class="form-horizontal">
+
+
+                <div class="form-group">
+                    <label for="id" class="col-sm-2 control-label">编号：</label>
+                    <div class="col-sm-10">
+                        <input type="text" id="id" name="id" value="" class="form-control" placeholder="编号">
+                        <span class="form-control-feedback"></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="name" class="col-sm-2 control-label">姓名：</label>
+                    <div class="col-sm-10">
+                        <input type="text" id="name" name="name" value="" class="form-control" placeholder="姓名（必填）">
+                        <span class="form-control-feedback"></span>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="phone" class="col-sm-2 control-label">电话：</label>
+                    <div class="col-sm-10">
+                        <input type="text" id="phone" name="phone" value="" class="form-control" placeholder="电话（必填）">
+                        <span class="form-control-feedback"></span>
+                    </div>
+                </div>
+
+
+
+                <div class="form-group">
+                    <label for="id_card" class="col-sm-2 control-label">证件号：</label>
+                    <div class="col-sm-10">
+                        <input type="text" id="id_card" name="id_card" value="" class="form-control" placeholder="证件号（必填）">
+                        <span class="form-control-feedback"></span>
+                    </div>
+                </div>
+
+            </form>
+
+            </br>
+
+        </div>
+        <div  style="margin-left:647px;;padding-top:10px;">
+            <button type="button" class="btn btn-default" onclick="window.history.back(-1);">返回</button>
+
+            <button type="button" class="btn btn-default" onclick="update()">更新</button>
+
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>

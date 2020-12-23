@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="teclan.spring.dao.LogDao">
+
+    <sql id="queryWhere">
+        where
+        1=1
+        <if test="sessionId!=null">
+            and  `session_id` like CONCAT('%', #{sessionId}, '%')
+        </if>
+        <if test="url!=null">
+            and `url` like CONCAT('%', #{url}, '%')
+        </if>
+        <if test="header!=null">
+            and `header` like CONCAT('%', #{header}, '%')
+        </if>
+        <if test="parameter!=null">
+            and `parameter` like CONCAT('%', #{parameter}, '%')
+        </if>
+        <if test="status!=null">
+            and `status` like CONCAT('%', #{status}, '%')
+        </if>
+        <if test="result!=null">
+            and `result` like CONCAT('%', #{result}, '%')
+        </if>
+        <if test="createdAtStart!=null">
+            and `created_at` &gt;= #{createdAtStart}
+        </if>
+        <if test="createdAtEnd!=null">
+            and `created_at` &lt; #{createdAtEnd}
+        </if>
+    </sql>
+
+    <select id="query" parameterType="hashmap" resultType="hashMap">
+        select * from log
+        <include refid="queryWhere"></include>
+        order by #{oderBy} #{sort}
+        limit #{offset},#{limit}
+    </select>
+
+    <select id="countQuery" parameterType="hashmap" resultType="java.lang.Integer">
+        select count(*) from log
+        <include refid="queryWhere"></include>
+    </select>
+
+    <select id="findOne" resultType="teclan.spring.model.Log" parameterType="java.lang.String">
+        select *  from log
+        where
+            id=#{id}
+    </select>
+
+    <delete id="delete"  parameterType="java.lang.Integer">
+        delete from log where id=#{id}
+    </delete>
+
+    <delete id="deleteBatch" >
+        delete from log where id in
+        <foreach item="item" index="index" collection="ids"
+                 open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <insert id="create" parameterType="teclan.spring.model.Log">
+        insert into log (`id`,`session_id`,`url`,`header`,`parameter`,`status`,`result`,`created_at`)
+        values (#{id},#{sessionId},#{url},#{header},#{parameter},#{status},#{result},#{createdAt});
+    </insert>
+
+    <insert id="update" parameterType="teclan.spring.model.Log">
+        update log set
+
+        <if test="sessionId!=null">
+           `session_id`=#{sessionId},
+        </if>
+
+        <if test="url!=null">
+            `url`=#{url},
+        </if>
+        <if test="header!=null">
+            `header`=#{header},
+        </if>
+        <if test="parameter!=null">
+            `parameter`=#{parameter},
+        </if>
+        <if test="status!=null">
+            `status`=#{status},
+        </if>
+        <if test="result!=null">
+            `result`=#{result},
+        </if>
+        <if test="createdAt!=null">
+            `created_at`=#{createdAt},
+        </if>
+        `id`=#{id}
+        where
+            `id`=#{id}
+    </insert>
+
+</mapper>

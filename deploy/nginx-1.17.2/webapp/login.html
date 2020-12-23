@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+
+
+    <link rel="stylesheet" href="resource/lib/bootstrap-3.3.7/css/bootstrap.css">
+    <link rel="stylesheet" href="resource/lib/messenger/css/messenger.css">
+
+    <script  language="javascript" type="text/javascript"  src="resource/lib/js/jquery-3.4.1.min.js"></script>
+    <script  language="javascript" type="text/javascript"  src="resource/lib/js/jquery-ajax-expand.js"></script>
+
+    <script  language="javascript" type="text/javascript"  src="resource/lib/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+
+    <script  language="javascript" type="text/javascript"  src="resource/lib/messenger/js/messenger.min.js"></script>
+    <script  language="javascript" type="text/javascript"  src="resource/lib/messenger/js/messenger-theme-future.js"></script>
+
+    <script  language="javascript" type="text/javascript"  src="resource/js/login/login.js"></script>
+    <script  language="javascript" type="text/javascript"  src="resource/js/common/HttpTools.js"></script>
+    <script  language="javascript" type="text/javascript"  src="resource/js/common/config.js"></script>
+    <script  language="javascript" type="text/javascript"  src="resource/js/common/base.js"></script>
+
+    <style type="text/css">
+
+        .main{
+            text-align: center; /*让div内部文字居中*/
+            background-color: #fff;
+            border-radius: 20px;
+            width: 300px;
+            height: 350px;
+            margin: auto;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+
+    </style>
+
+
+</head>
+
+
+
+
+
+
+
+<body>
+
+<script type="text/javascript">
+
+    function doLogin(){
+
+      var id = $('#id').val();
+      var password = $('#password').val();
+      login(id,password);
+    };
+</script>
+
+      <div class="main" id="main">
+          <h1>XXX系统</h1>
+
+          </br>
+
+          <div class="input-group input-group-lg">
+              <span class="input-group-addon" id="account">账号</span>
+              <input type="text" class="form-control" id="id" placeholder="ID/手机号" aria-describedby="sizing-addon1">
+          </div>
+
+          </br>
+
+          <div class="input-group input-group-lg">
+              <span class="input-group-addon" id="pwd">密码</span>
+              <input type="password" id="password" class="form-control" placeholder="密码" aria-describedby="sizing-addon1">
+          </div>
+
+          </br>
+
+          <div class="btn-group btn-group-lg" role="group" >
+
+              <button type="button" class="btn btn-default" onclick="register()">注册</button>
+
+              <button type="button" class="btn btn-default" onclick="doLogin()">登录</button>
+
+          </div>
+
+
+      </div>
+
+</body>
+</html>
+
+
+
+
+

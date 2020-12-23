@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+
+    <link rel="stylesheet" href="../css/common/include.css">
+
+    <script  language="javascript" type="text/javascript"  src="../js/common/include.js"></script>
+
+    <title>添加节点</title>
+
+
+</head>
+<body >
+
+<script type="text/javascript">
+
+
+function save(){
+  var id= $('#id').val();
+  var name= $('#name').val();
+  var parentId= $('#parentId').val();
+
+  var json = '{"id":"'+id+'","name":"'+name+'","parentId":"'+parentId+'"}';
+  doAdd(json);
+};
+
+</script>
+<div style="margin-top:50px;margin-left:10px; margin-right:10px;;">
+                <div class="row" >
+                    <div class="col-sm-1">
+                        <label class="col-sm-2 control-label">父节点：</label>
+                        <span class="form-control-feedback"></span>
+                    </div>
+                    <div class="col-sm-3">
+                        <input  type="hidden" id="parentId" value="" >
+                        <input type="text" id="parentName" name="parentName" value="" class="form-control">
+                        <span class="form-control-feedback"></span>
+                    </div>
+                </div>
+
+    </br>
+
+                <div class="row">
+                    <div class="col-sm-1">
+                        <label for="name" class="col-sm-2 control-label">节点名称：</label>
+                    </div>
+                    <div class="col-sm-3">
+                        <input type="text" id="name" name="name" value="" class="form-control">
+                        <span class="form-control-feedback"></span>
+                    </div>
+                </div>
+
+    </br>
+
+    <div  style="margin-left:260px;padding-top:10px;">
+        <button type="button" class="btn btn-default" onclick="parent.back()">返回</button>
+        <button type="button" class="btn btn-default" onclick="save()">添加</button>
+
+    </div>
+</div>
+
+
+</body>
+</html>

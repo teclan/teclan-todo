@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>ECharts</title>
+    <!-- 引入 echarts.js -->
+    <script  language="javascript" type="text/javascript"  src="../js/common/include.js"></script>
+</head>
+<body>
+
+<!-- 折线图 -->
+<div id="base_line" style="width: 600px;height:200px;"></div>
+<div id="pie_with_scrollable" style="width: 700px;height:400px;"></div>
+
+
+<script type="text/javascript">
+
+
+        // 基于准备好的dom，初始化echarts实例
+        var base_line = echarts.init(document.getElementById('base_line'));
+
+        // 指定图表的配置项和数据
+        base_line_option = {
+             title: {
+                text: '在线人数',// 标题
+                subtext: '虚构数据', // 子标题
+                left: 'center'
+            },
+            xAxis: {
+                type: 'category',
+                data: ['10:00', '10:05', '10:10', '10:15', '10:20', '10:25', '10:30'],
+                name: '时间',  //x轴的名称
+                nameRotate:0,//坐标轴名字旋转角度值
+                splitLine: {
+                    show: false // 是否显示与纵轴平行的标线
+                }
+            },
+            yAxis: {
+                type: 'value',
+                name: '当前人数',  //y轴的名称
+                splitLine: {
+                    show: true // 是否显示与横轴平行的标线
+                }
+            },
+            series: [{
+                data: [820, 932, 901, 934, 1290, 1330, 1320],
+                type: 'line'
+            }]
+        };
+
+        // 使用刚指定的配置项和数据显示图表。
+        base_line.setOption(base_line_option);
+
+
+
+   var pie_with_scrollable = echarts.init(document.getElementById('pie_with_scrollable'));
+   var data = {
+     seriesData:[
+                {value: 335, name: '直接访问'},
+                {value: 310, name: '邮件营销'},
+                {value: 234, name: '联盟广告'},
+                {value: 135, name: '视频广告'},
+                {value: 1548, name: '搜索引擎'}
+               ]
+   };
+    pie_with_scrollable_option = {
+        title : {
+            text: '年龄段比例',
+            subtext: '纯属虚构',
+            x:'center'
+        },
+        // 鼠标移上去的提示
+        tooltip : {
+
+            // 'item':数据项图形触发，主要在散点图，饼图等无类目轴的图表中使用。
+            //'axis':坐标轴触发，主要在柱状图，折线图等会使用类目轴的图表中使用
+            trigger: 'item',
+            formatter: function (params, ticket, callback) {
+            return params.name+":"+params.value;
+        }
+        },
+        legend: {
+            type: 'scroll',
+            orient: 'vertical',
+            right: 10,
+            top: 20,
+            bottom: 20,
+            selected: data.selected
+        },
+        series : [
+            {
+                type: 'pie',
+                data: data.seriesData,
+                itemStyle: {
+                    emphasis: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                }
+            }
+        ]
+    };
+
+   pie_with_scrollable.setOption(pie_with_scrollable_option);
+
+    </script>
+</body>
+</html>
