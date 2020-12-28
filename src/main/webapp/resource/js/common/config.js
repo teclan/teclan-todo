@@ -1,5 +1,5 @@
 // 后端服务根路径
-var BASE_URL="/teclan-spring-mvc";
+var BASE_URL="/teclan-todo";
 
 // 前端根路径,前后端分离请设置为空，否则与 BASE_URL 同值
 var ROOT_URL=BASE_URL;

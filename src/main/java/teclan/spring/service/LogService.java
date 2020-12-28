@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import teclan.spring.dao.Dao;
 import teclan.spring.dao.LogDao;
 import teclan.spring.model.Log;
-import teclan.spring.model.Model;
 import teclan.spring.util.HttpTool;
 import teclan.spring.util.PropertyConfigUtil;
 import teclan.spring.util.ResultUtil;

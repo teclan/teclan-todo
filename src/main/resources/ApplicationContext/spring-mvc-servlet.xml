@@ -35,20 +35,6 @@
 	<bean id="multipartResolver"
 		class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
 
-	<!-- 配置SqlSessionFactory -->
-	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-		<!-- 加载数据库连接池 -->
-		<property name="dataSource" ref="dataSource"></property>
-		<!-- 加载mybatis全局配置文件 -->
-		<property name="configLocation" value="classpath:ApplicationContext/Mybatis-Config.xml"></property>
-	</bean>
-	<!-- 配置mapper扫描器 -->
-	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<!-- 扫描包路径，如果需要扫描多个，中间使用半角的逗号隔开 -->
-		<property name="basePackage" value="teclan.spring.dao"></property>
-		<property name="SqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
-	</bean>
-
 	<bean id="logService" class="teclan.spring.service.LogService"/>
 	<!-- 系统服务组件的切面Bean -->
 	<bean id="logAspect" class="teclan.spring.aop.LogAspect"/>
