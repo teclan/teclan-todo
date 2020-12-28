@@ -18,7 +18,7 @@ public interface Dao<T> {
 
     public Integer update(JSONObject o);
 
-    public List<T> query(Map<String,Object> parameter);
+    public List<Map<String,Object>> query(Map<String,Object> parameter);
 
     public Integer countQuery(Map<String,Object> parameter);
 

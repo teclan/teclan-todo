@@ -11,10 +11,10 @@ public class LogRowMapper implements RowMapper<Log> {
     @Override
     public Log mapRow(ResultSet rs, int i) throws SQLException {
         Log log = new Log();
-        log.setId(rs.getString("id"));
         log.setSessionId(rs.getString("sessionId"));
         log.setHost(rs.getString("host"));
         log.setPort(rs.getInt("port"));
+        log.setUser(rs.getString("user"));
         log.setHeader(rs.getString("header"));
         log.setParameter(rs.getString("parameter"));
         log.setResult(rs.getString("result"));

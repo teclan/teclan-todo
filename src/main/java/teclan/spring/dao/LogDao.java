@@ -11,11 +11,11 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
-public class LogDao implements Dao<Log>{
+public class LogDao extends AbstractDao implements Dao<Log>{
 
     @Override
     public Log findOne(String  id) {
-        return jdbcTemplate.queryForObject("select * from logs where id=?",new Object[]{id},new LogRowMapper());
+        return jdbcTemplate.queryForObject("select * from log where id=?",new Object[]{id},new LogRowMapper());
     }
 
     @Override
@@ -30,7 +30,8 @@ public class LogDao implements Dao<Log>{
 
     @Override
     public Integer create(JSONObject o) {
-        return null;
+        QueryObject queryObject = getQueryObject4Insert(o,"log");
+        return jdbcTemplate.update(queryObject.getSql(),queryObject.getValues());
     }
 
     @Override
@@ -38,14 +39,13 @@ public class LogDao implements Dao<Log>{
         return null;
     }
 
-    @Override
-    public List<Log> query(Map<String, Object> parameter) {
-        return jdbcTemplate.queryForList("select * from logs where 1=?",new Object[]{1},Log.class);
+    public List<Map<String,Object>> query(Map<String, Object> parameter) {
+        return jdbcTemplate.queryForList("select * from log "+ transform4Query(parameter));
     }
 
     @Override
     public Integer countQuery(Map<String, Object> parameter) {
-        return null;
+        return jdbcTemplate.queryForObject("select COUNT(*) from log "+ transform4Count(parameter),Integer.class);
     }
 
     @Autowired

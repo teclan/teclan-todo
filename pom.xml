@@ -257,6 +257,14 @@
                     <warName>teclan-todo</warName>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>8</source>
+                    <target>8</target>
+                </configuration>
+            </plugin>
         </plugins>
         <!-- 以下resources 的配置是必须，因为maven项目默认只将 resources 下面的资源文件打包进 classes目录，
         其他目录例如我们的mybatis映射文件（.xml）与接口文件同路径，在 src/mian/java 目录下，是不会打包的，

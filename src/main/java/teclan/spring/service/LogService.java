@@ -65,7 +65,7 @@ public class LogService extends AbstractService {
 
 
     public JSONObject create(JSONObject jsonObject) {
-        logs.put(jsonObject.getString("id"), jsonObject);
+        logs.put(jsonObject.getString("sessionId"), jsonObject);
 
         if (logs.size() >= poolSize) {
             doCreate();
@@ -82,9 +82,9 @@ public class LogService extends AbstractService {
 
                     JSONObject jsonObject = logs.get(key);
 
-                    if("".equals(jsonObject.getString("result").trim())){
-                        continue;
-                    }
+//                    if("".equals(jsonObject.getString("result").trim())){
+//                        continue;
+//                    }
                     getDao().create(logs.remove(key));
                 }
             }

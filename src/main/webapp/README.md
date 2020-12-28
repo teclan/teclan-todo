@@ -114,7 +114,7 @@ function flushPageInfo(pageInfo){
 
   {"id": "home","name": "首页","dropdown": false,"url": "/resource/home/home.html"},
   {"id": "user","name": "用户","dropdown": false,"url": "/resource/user/userList.html"},
-  {"id": "todo","name": "任务","dropdown": false,"url": "/resource/todo/todoList.html"},
+  {"id": "todo","name": "任务","dropdown": false,"url": "/resource/todo/logList.html"},
   {"id": "dropdown1","name": "下拉测试","dropdown": true,"url":"",
                   "dropdown_items":[
                     {"id": "first","name": "firstName","dropdown": false,"url":""},

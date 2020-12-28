@@ -21,6 +21,7 @@ public class Log extends Model {
     private String host;
     private int port;
     private String url;
+    private String user;
     private String header;
     private Object parameter;
     private String result;
@@ -29,12 +30,13 @@ public class Log extends Model {
 
     public Log(){}
 
-    public Log(String id, String sessionId, String host, int port, String url, String header, Object parameter, String result, String status, String createdAt) {
-        this.id = id;
+    public Log(String sessionId, String host, int port,String user, String url, String header, Object parameter, String result, String status, String createdAt) {
+        this.id = IdUtils.get();
         this.sessionId = sessionId;
         this.host = host;
         this.port = port;
         this.url = url;
+        this.user=user;
         this.header = header;
         this.parameter = parameter;
         this.result = result;
@@ -42,15 +44,24 @@ public class Log extends Model {
         this.createdAt = createdAt;
     }
 
-    public Log(String id, String sessionId, String host, int port, String url, String header, Object parameter, String createdAt) {
-        this.id = id;
+    public Log( String sessionId, String host, int port, String user,String url, String header, Object parameter, String createdAt) {
+        this.id = IdUtils.get();
         this.sessionId = sessionId;
         this.host = host;
         this.port = port;
         this.url = url;
+        this.user=user;
         this.header = header;
         this.parameter = parameter;
         this.createdAt = createdAt;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getHost() {
@@ -67,14 +78,6 @@ public class Log extends Model {
 
     public void setPort(int port) {
         this.port = port;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getSessionId() {
@@ -133,14 +136,16 @@ public class Log extends Model {
         this.header = header;
     }
 
-    @Override
-    public String getTableName() {
-        return "log";
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
     }
 
     public static Log parse(HttpServletRequest httpServletRequest){
 
-        String id = IdUtils.get();
         String sessionId = httpServletRequest.getSession().getId();
         String host = httpServletRequest.getRemoteHost();
         int port = httpServletRequest.getRemotePort();
@@ -152,12 +157,12 @@ public class Log extends Model {
             String value = httpServletRequest.getHeader(key);
             header.put(key,value);
         }
+        String headerStr = JSON.toJSONString(header);
 
         String parameter = HttpTool.readJSONString(httpServletRequest);
         String createdAt =sdf.format(new Date());
 
-
-        return new Log(id,sessionId,host,port,url, JSON.toJSONString(header),parameter,createdAt);
+        return new Log(sessionId,host,port,(String) header.get("account"),url,headerStr,parameter,createdAt);
     }
 
 }

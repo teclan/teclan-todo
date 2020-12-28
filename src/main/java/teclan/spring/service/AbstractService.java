@@ -95,6 +95,9 @@ public abstract class AbstractService implements Service {
             currentPage = PagesUtils.getCurrentPage(totalPages, currentPage);
             int offset = PagesUtils.getOffset(currentPage, pageSize);
 
+            jsonObject.remove("currentPage");
+            jsonObject.remove("pageSize");
+
             jsonObject.put("offset", offset);
             jsonObject.put("limit", pageSize);
 
