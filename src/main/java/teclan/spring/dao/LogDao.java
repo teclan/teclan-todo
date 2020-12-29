@@ -4,18 +4,17 @@ import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import teclan.spring.model.Log;
 import teclan.spring.rowmapper.LogRowMapper;
 
 import java.util.List;
 import java.util.Map;
 
 @Repository
-public class LogDao extends AbstractDao implements Dao<Log>{
+public class LogDao extends AbstractDao implements Dao{
 
     @Override
-    public Log findOne(String  id) {
-        return jdbcTemplate.queryForObject("select * from log where id=?",new Object[]{id},new LogRowMapper());
+    public  Map<String,Object> findOne(String  id) {
+        return jdbcTemplate.queryForMap("select * from log where id=?",new Object[]{id},new LogRowMapper());
     }
 
     @Override

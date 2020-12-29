@@ -6,9 +6,9 @@ import teclan.spring.model.Model;
 import java.util.List;
 import java.util.Map;
 
-public interface Dao<T> {
+public interface Dao{
 
-    public T findOne(String  id);
+    public Map<String,Object> findOne(String  id);
 
     public Integer delete(String  id);
 

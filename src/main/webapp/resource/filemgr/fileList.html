@@ -23,7 +23,7 @@
         $(function () {
             initPage();
 
-            $('#logs').css('font-size','25px');
+            $('#filemgr').css('font-size','25px');
 
             get();
         });
@@ -44,7 +44,9 @@
     <table class="table table-hover table-bordered" id="userList">
         <thead>
             <tr class="success">
+                <th class="text-center" hidden="true">ID</th>
                 <th class="text-center">文件名</th>
+                <th class="text-center" hidden="true">绝对路径</th>
                 <th class="text-center">文件大小</th>
                 <th class="text-center">创建时间</th>
                 <th class="text-center">最后修改时间</th>

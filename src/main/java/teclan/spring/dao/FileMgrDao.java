@@ -6,30 +6,31 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import teclan.spring.model.Log;
 import teclan.spring.rowmapper.LogRowMapper;
+import teclan.spring.util.Objects;
 
 import java.util.List;
 import java.util.Map;
 
 @Repository
-public class FileMgrDao extends AbstractDao implements Dao<Log>{
+public class FileMgrDao extends AbstractDao implements Dao{
 
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
     @Override
-    public Log findOne(String id) {
-        return null;
+    public Map<String,Object> findOne(String id) {
+        return  jdbcTemplate.queryForMap("select * from file_mgr where id=?",new Object[]{id});
     }
 
     @Override
     public Integer delete(String id) {
-        return null;
+        return  jdbcTemplate.update("select * from file_mgr where id=?",new Object[]{id});
     }
 
     @Override
     public Integer deleteBatch(String[] ids) {
-        return null;
+        return  jdbcTemplate.update(String.format("select * from file_mgr where id in ('%s')", Objects.Joiner("','",ids)));
     }
 
     @Override
