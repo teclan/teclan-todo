@@ -15,7 +15,7 @@ $._messengerDefaults = {
 };
 
 // 版权
-var  COPY_RIGHT = "©2019 Teclan 广西xxxx公司";
+var  COPY_RIGHT = "©2020 Teclan 广西老谭科技集团有限公司";
 
 // 全局页脚信息，一般含版权，联系方式等
 var GLOBAL_FOOTER_HTML ='<footer id="default_footer" style="text-align:center">'+COPY_RIGHT+'</footer>';

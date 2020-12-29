@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+
+
+    <link rel="stylesheet" href="../css/common/include.css">
+
+    <script  language="javascript" type="text/javascript"  src="../js/common/include.js"></script>
+
+    <script  language="javascript" type="text/javascript"  src="filemgr.js"></script>
+
+    <title>任务管理</title>
+
+
+</head>
+<body id="body">
+
+    <script type="text/javascript">
+
+        $(function () {
+            initPage();
+
+            $('#logs').css('font-size','25px');
+
+            get();
+        });
+
+
+
+    </script>
+
+    <div id="navigation"></div>
+
+
+    <div style="padding-left:10px;padding-top:100px;padding-top:100px;padding-bottom:10px;">
+        <button class="btn btn-default" type="button" onclick="get()">查询</button>
+
+    </div>
+
+
+    <table class="table table-hover table-bordered" id="userList">
+        <thead>
+            <tr class="success">
+                <th class="text-center">文件名</th>
+                <th class="text-center">文件大小</th>
+                <th class="text-center">创建时间</th>
+                <th class="text-center">最后修改时间</th>
+                <th class="text-center">上传人</th>
+                <th class="text-center">访问权限</th>
+                <th class="text-center">操作</th>
+            </tr>
+        </thead>
+
+        <tbody id="tbody" class="active">
+
+        </tbody>
+        </tr>
+
+    </table>
+
+    <div id="default_pagination"></div>
+
+</body>
+</html>

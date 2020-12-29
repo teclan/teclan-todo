@@ -4,6 +4,7 @@
   {"id": "user","name": "用户","dropdown": false,"url": "/resource/user/userList.html"},
   {"id": "todo","name": "任务","dropdown": false,"url": "/resource/todo/todoList.html"},
   {"id": "logs","name": "日志","dropdown": false,"url": "/resource/logs/logList.html"},
+  {"id": "filemgr","name": "文件管理","dropdown": false,"url": "/resource/filemgr/fileList.html"},
   {"id": "avatar","name": "个人中心","dropdown": true,"url": "#",
                   "dropdown_items":[
                     {"id": "profile","name": "个人资料","dropdown": false,"url":""},

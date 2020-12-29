@@ -13,6 +13,7 @@ import teclan.spring.util.ResultUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
 
 public abstract class AbstractService implements Service {
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractService.class);
@@ -101,7 +102,7 @@ public abstract class AbstractService implements Service {
             jsonObject.put("offset", offset);
             jsonObject.put("limit", pageSize);
 
-            List<Object> models = getDao().query(jsonObject);
+            List<Map<String,Object>> models = getDao().query(jsonObject);
 
             return ResultUtil.get(200, "查询成功", models,PagesUtils.getPageInfo(currentPage,pageSize,total));
         } catch (Exception e) {

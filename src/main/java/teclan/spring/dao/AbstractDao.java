@@ -18,7 +18,7 @@ public class AbstractDao {
             if("limit".equalsIgnoreCase(key) || "offset".equalsIgnoreCase(key) || "pageSize".equalsIgnoreCase(key) || "oderBy".equalsIgnoreCase(key)|| "sort".equalsIgnoreCase(key)|| "currentPage".equalsIgnoreCase(key)){
                 continue;
             }
-            sb.append(key.endsWith("_fuzzy")?String.format(" and  %s like '%s' ",key.substring(0,key.length()-6),"%"+parameter.get(key)+"%"):String.format(" and %s = '%s' ",key.substring(0,key.length()-6),parameter.get(key)));
+            sb.append(key.endsWith("_fuzzy")?String.format(" and  %s like '%s' ",key.substring(0,key.length()-6),"%"+parameter.get(key)+"%"):String.format(" and %s = '%s' ",key,parameter.get(key)));
         }
 
         sb.append(String.format(" order by %s %s limit %s,%s ",parameter.get("oderBy"),parameter.get("sort"),parameter.get("offset"),parameter.get("limit")));
@@ -34,7 +34,7 @@ public class AbstractDao {
                 continue;
             }
 
-            sb.append(key.endsWith("_fuzzy")?String.format(" and  %s like '%s' ",key.substring(0,key.length()-6),"%"+parameter.get(key)+"%"):String.format(" and %s = '%s' ",key.substring(0,key.length()-6),parameter.get(key)));
+            sb.append(key.endsWith("_fuzzy")?String.format(" and  %s like '%s' ",key.substring(0,key.length()-6),"%"+parameter.get(key)+"%"):String.format(" and %s = '%s' ",key,parameter.get(key)));
         }
 
         return sb.toString();
