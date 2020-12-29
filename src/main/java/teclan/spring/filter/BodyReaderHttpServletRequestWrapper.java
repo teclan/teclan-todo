@@ -5,6 +5,7 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Enumeration;
 
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -14,11 +15,12 @@ import jodd.io.StreamUtil;
 
 public class BodyReaderHttpServletRequestWrapper extends HttpServletRequestWrapper {
 	private final byte[] body;
-
+	private Enumeration headerNames;
 	public BodyReaderHttpServletRequestWrapper(HttpServletRequest request)
 			throws IOException {
 		super(request);
 		body = StreamUtil.readBytes(request.getReader(),"UTF-8");
+		headerNames =  request.getHeaderNames();
 	}
 
 	@Override

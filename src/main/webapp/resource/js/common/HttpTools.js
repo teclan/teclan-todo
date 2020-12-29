@@ -24,8 +24,6 @@ function requestWithJson(method,isAsync,url,json,suc,fai){
 
             var callBack = function(data){
 
-                 var header = new Object();
-
                  for(var i in data){
                     var item = data[i];
 
@@ -34,7 +32,7 @@ function requestWithJson(method,isAsync,url,json,suc,fai){
                  }
             };
 
-            readJsonConfig("resource/json/header.json",callBack);
+            readJsonConfig(ROOT_URL+"/resource/json/header.json",callBack);
         },
 
         success: function (res) {
@@ -64,8 +62,6 @@ var result="";
 
                     var callBack = function(data){
 
-                         var header = new Object();
-
                          for(var i in data){
                             var item = data[i];
 
@@ -74,7 +70,7 @@ var result="";
                          }
                     };
 
-                    readJsonConfig("resource/json/header.json",callBack);
+            readJsonConfig(ROOT_URL+"/resource/json/header.json",callBack);
        },
 
         success: function (res) {

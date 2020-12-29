@@ -7,6 +7,6 @@
   {"id": "avatar","name": "个人中心","dropdown": true,"url": "#",
                   "dropdown_items":[
                     {"id": "profile","name": "个人资料","dropdown": false,"url":""},
-                    {"id": "logout","name": "登   出","dropdown": false,"url":"/?from-logout=1"}]
+                    {"id": "logout","name": "登   出","dropdown": false,"url":"/"}]
   }
 ]

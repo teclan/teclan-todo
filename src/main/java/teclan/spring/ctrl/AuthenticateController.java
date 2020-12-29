@@ -50,8 +50,11 @@ public class AuthenticateController {
 
            String token = JwtFactory.getJws(user);
 
-            map.put("USER",user);
-            map.put("TOKEN",token);
+            map.put("user",user);
+            map.put("token",token);
+
+            request.setAttribute("user",user);
+            request.setAttribute("token",token);
 
             GuavaCache.set(user,token);
 

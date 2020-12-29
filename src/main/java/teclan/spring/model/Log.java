@@ -1,6 +1,7 @@
 package teclan.spring.model;
 
 import com.alibaba.fastjson.JSON;
+import teclan.flyway.utils.Strings;
 import teclan.spring.util.HttpTool;
 import teclan.spring.util.IdUtils;
 import teclan.spring.util.PropertyConfigUtil;
@@ -8,6 +9,7 @@ import teclan.spring.util.PropertyConfigUtil;
 import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -151,18 +153,28 @@ public class Log extends Model {
         int port = httpServletRequest.getRemotePort();
         String url = httpServletRequest.getRequestURI();
 
-        Map<String,Object> header = new HashMap<>();
-
+        Map<String,String> header = new HashMap<>();
         for(String key :headers){
             String value = httpServletRequest.getHeader(key);
             header.put(key,value);
         }
+
+        String user = (String)httpServletRequest.getAttribute("user");
+        String token = (String)httpServletRequest.getAttribute("token");
+        if(!Strings.isEmpty(user)){
+            header.put("user",user);
+        }
+        if(!Strings.isEmpty(token)){
+            header.put("token",token);
+        }
+
         String headerStr = JSON.toJSONString(header);
 
         String parameter = HttpTool.readJSONString(httpServletRequest);
         String createdAt =sdf.format(new Date());
 
-        return new Log(sessionId,host,port,(String) header.get("account"),url,headerStr,parameter,createdAt);
+
+        return new Log(sessionId,host,port,header.get("user"),url,headerStr,parameter,createdAt);
     }
 
 }

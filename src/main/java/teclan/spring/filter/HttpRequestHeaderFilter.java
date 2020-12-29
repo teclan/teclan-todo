@@ -46,7 +46,9 @@ public class HttpRequestHeaderFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
 
-        HttpServletRequest request = (HttpServletRequest) servletRequest;
+        BodyReaderHttpServletRequestWrapper request = new BodyReaderHttpServletRequestWrapper(
+                (HttpServletRequest) servletRequest);
+
         StatusExposingServletResponse response = new StatusExposingServletResponse(
                 (HttpServletResponse) servletResponse);
 
@@ -76,7 +78,7 @@ public class HttpRequestHeaderFilter implements Filter {
         }
 
 
-        filterChain.doFilter(servletRequest, response);
+        filterChain.doFilter(request, response);
     }
 
     @Override

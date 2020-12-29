@@ -38,18 +38,28 @@
 
     $(function () {
        doLogout();
-      // clearLocalStorage();
+       // clearLocalStorage();
        setDefaultFooter('footer');
     });
 
     function doLogout(){
-      // 如果是来自登出，则需要发起登出操作
-      var from_logout = getUrlParameter('from-logout');
-      if(from_logout==1){
-        logout();
-      }
-    };
 
+        var callBack = function(configs){
+
+            for(var i in configs){
+                var item = configs[i];
+                var key = item.key;
+
+
+                var value = localStorage.getItem(key);
+
+                if(value!=undefined && value!=null){
+                    logout();
+                }
+            }
+        }
+        readJsonConfig(ROOT_URL+"/resource/json/header.json",callBack);
+    };
 
     function doLogin(){
       var id = $('#id').val();

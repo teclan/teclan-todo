@@ -4,7 +4,7 @@ CREATE TABLE `log` (
   `host` varchar(32) DEFAULT NULL comment '主机',
   `port` int DEFAULT NULL comment '端口号',
   `url` varchar(2000) DEFAULT NULL comment 'url',
-  `user` int DEFAULT NULL comment '用户',
+   user varchar(50)  null comment '账号',
   `header` varchar(2000) DEFAULT NULL comment '请求头信息',
   `parameter` text comment '参数',
   `status` varchar(32) comment '状态',

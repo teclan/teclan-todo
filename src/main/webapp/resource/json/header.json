@@ -1,4 +1,4 @@
 [
-  {"key": "USER","description": "当前登录用户"},
-  {"key": "TOKEN","description": "登录成功获取到的token"}
+  {"key": "user","description": "当前登录用户"},
+  {"key": "token","description": "登录成功获取到的token"}
 ]

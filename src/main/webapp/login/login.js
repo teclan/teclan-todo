@@ -12,9 +12,6 @@ function register(){
 
 
 function login(id,password){
-
-     var result;
-
      var handleSuccess = function(data){
             if(data !== undefined) {
                     try {
@@ -74,7 +71,7 @@ function logout(){
  	 var handleFailure = function(o){
  	 };
 
-    var json = '{"account":"'+localStorage.getItem("USER")+'"}';
+    var json = '{"account":"'+localStorage.getItem("user")+'"}';
  	sync('POST',BASE_URL+'/logout.do',json,handleSuccess,handleFailure);
 
 };

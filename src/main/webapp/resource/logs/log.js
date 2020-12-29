@@ -26,7 +26,9 @@ function query(currentPage){
                                 var tr='<tr class="active text-center"> ';
                                 tr+='<td> '+val.host+' </td>';
                                 tr+='<td> '+val.port+' </td>';
+                                tr+='<td> '+val.user+' </td>';
                                 tr+='<td> '+val.url+' </td>';
+                                tr+='<td> '+val.parameter+' </td>';
                                 tr+='<td> '+val.status+' </td>';
                                 tr+='<td> '+val.created_at+' </td>';
                                 tr+='</tr>';
