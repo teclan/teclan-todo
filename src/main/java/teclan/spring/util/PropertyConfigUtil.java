@@ -49,7 +49,7 @@ public class PropertyConfigUtil {
 			LOGGER.error("\n配置文件加载失败 {}\n",
 					environment == null ? propertiesFile : dir + environment + "/" + propertiesFile);
 		} else {
-			LOGGER.error("\n配置文件加载成功 {}\n",
+			LOGGER.error("配置文件加载成功 {}",
 					environment == null ? propertiesFile : dir + environment + "/" + propertiesFile);
 		}
 	}

@@ -176,6 +176,13 @@
         </dependency>
         <!-- 请求解析依赖  -->
 
+        <!-- https://github.com/teclan/teclan-netty -->
+        <dependency>
+            <groupId>teclan-netty</groupId>
+            <artifactId>teclan-netty</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
         <dependency>
             <groupId>com.sdicons.jsontools</groupId>
             <artifactId>jsontools-core</artifactId>

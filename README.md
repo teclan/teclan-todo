@@ -14,6 +14,10 @@ mvn install -D maven.test.skip=true
 git clone https://github.com/teclan/teclan-flyway
 cd teclan-jwt
 mvn install -D maven.test.skip=true
+
+git clone https://github.com/teclan/teclan-netty
+cd teclan-netty
+mvn install -D maven.test.skip=true
 ```
 
 ## 运行
