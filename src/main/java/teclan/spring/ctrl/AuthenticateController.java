@@ -13,12 +13,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import teclan.spring.cache.GuavaCache;
 import teclan.spring.util.HttpTool;
+import teclan.spring.util.Objects;
 import teclan.spring.util.ResultUtil;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -45,10 +47,19 @@ public class AuthenticateController {
             String json = HttpTool.readJSONString(request);
             JSONObject parameter = JSON.parseObject(json);
             String user = parameter.getString("account");// 账号，唯一
+            String password = parameter.getString("password");
 
-            Map<String,Object> map = jdbcTemplate.queryForMap("select * from user_info where account=?",user);
+           List<Map<String,Object>> maps = jdbcTemplate.queryForList("select * from user_info where account=?",user);
 
-           String token = JwtFactory.getJws(user);
+            if(maps==null || maps.isEmpty()){
+                throw new Exception("用户不存在");
+            }
+            Map<String,Object> map = maps.get(0);
+            if(!password.equals(map.get("password"))){
+                throw new Exception("密码错误");
+            }
+
+            String token = JwtFactory.getJws(user);
 
             map.put("user",user);
             map.put("token",token);

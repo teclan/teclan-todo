@@ -4,6 +4,7 @@ package teclan.spring.ctrl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.io.FileUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -13,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
+import teclan.spring.service.FileService;
 import teclan.spring.util.ResultUtil;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,6 +26,9 @@ import java.util.Iterator;
 @Controller
 @RequestMapping("/file")
 public class FileController {
+
+    @Autowired
+    private FileService fileService;
 
     @RequestMapping("/upload1")
     @ResponseBody
@@ -63,6 +68,13 @@ public class FileController {
     public JSONObject fileUpload(HttpServletRequest request, HttpServletResponse response, @RequestParam("file") MultipartFile file) throws Exception {
         saveFiles(file);
         return ResultUtil.get(200, "上传成功");
+
+    }
+
+    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    @ResponseBody
+    public JSONObject list(HttpServletRequest request, HttpServletResponse response, @RequestParam("path") String path) throws Exception {
+        return fileService.list(path);
 
     }
 
