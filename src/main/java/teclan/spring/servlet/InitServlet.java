@@ -29,21 +29,24 @@ public class InitServlet extends HttpServlet{
 	@Override
 	public void init() throws ServletException {
 		super.init();
-		
-		LOGGER.info("\n==============================程序自检开始..\n\n");
+		try {
+			LOGGER.info("\n==============================程序自检开始..\n\n");
 
-		new MySqlFlywayFactory().flyway();
+			new MySqlFlywayFactory().flyway();
 
-		GuavaCache.init();
+			GuavaCache.init();
 
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				new FileServer().run(propertyconfigUtil.getIntValue("fileServierPort"));
-			}
-		}).start();
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					new FileServer().run(propertyconfigUtil.getIntValue("fileServierPort"));
+				}
+			}).start();
 
-		LOGGER.info("\n==============================程序自检结束..\n\n");
-
+			LOGGER.info("\n==============================程序自检结束..\n\n");
+		}catch (Exception e){
+			LOGGER.error(e.getMessage(),e);
+			System.exit(0);
+		}
 	}
 }

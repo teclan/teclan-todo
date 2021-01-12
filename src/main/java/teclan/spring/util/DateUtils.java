@@ -11,4 +11,10 @@ public class DateUtils {
         date.setTime(time);
         return SDF.format(date);
     }
+
+    public static String getDateTime() {
+        Date date = new Date();
+        return SDF.format(date);
+    }
+
 }

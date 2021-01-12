@@ -4,25 +4,27 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import teclan.netty.service.FileServer;
-import teclan.spring.ctrl.AuthenticateController;
-import teclan.spring.util.DateUtils;
-import teclan.spring.util.PropertyConfigUtil;
-import teclan.spring.util.ResultUtil;
+import teclan.spring.util.*;
 
 import java.io.File;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class FileService {
-    private static final DecimalFormat DF = new DecimalFormat("######0.00");
+
     private static final Logger LOGGER = LoggerFactory.getLogger(FileService.class);
     private final static PropertyConfigUtil propertyconfigUtil;
     private static String FILE_SERVER_ROOT = "" ;
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
     static {
         propertyconfigUtil = PropertyConfigUtil.getInstance("config.properties");
@@ -30,52 +32,92 @@ public class FileService {
     }
 
     public JSONObject download(JSONObject jsonObject){
-        String serverPath = jsonObject.getString("serverPath"); // 服务器路径
-        String[] paths = jsonObject.getString("paths").split(",");//服务器文件路径
-        String localPath = jsonObject.getString("localPath");//下载到客户端的文件路径
-        String remote = jsonObject.getString("remote"); // 客户端
+        JSONArray array = jsonObject.getJSONArray("paths");
+        List<String> paths = new ArrayList<>();
+        for(int i=0;i<array.size();i++){
+            String o = array.getString(i);
+            paths.add(o);
+        }
+        String local = jsonObject.getString("local");//下载到客户端的文件路径
+        String remote = jsonObject.getString("remote");
+        String user = jsonObject.getString("user");
+        String tunnel = jsonObject.getString("tunnel");
+        List<String> absolutePaths = new ArrayList<>();
+        for(String path:paths){
+            String absolutePath = FILE_SERVER_ROOT+File.separator+remote+File.separator+path;
+            absolutePaths.add(absolutePath);
+        }
+
+        Map<String,Object> map =jdbcTemplate.queryForMap(String.format("select count(*) from file_mgr where absolute_path in ('%s') and owner<>'%s' and permissions<>'public'", Objects.joiner("','",absolutePaths),user));
+        int count = Integer.valueOf(Objects.getOrDefault(map," count(*)","0"));
+
+        if(count>0){
+            return ResultUtil.get(403, "存在隐私文件，不允许下载，整个操作被拒绝！");
+        }
+
         for(String path:paths){
             try {
-                // TODO
-                // 添加权限控制
-                FileServer.push(remote,FILE_SERVER_ROOT+File.separator+serverPath,localPath,path );
+                FileServer.push(tunnel,FILE_SERVER_ROOT+File.separator+remote,local,path );
             } catch (Exception e) {
                 LOGGER.error(e.getMessage(),e);
             }
         }
+
         return ResultUtil.get(200, "发送指令成功");
     }
 
 
+    public JSONObject root(){
+        return ResultUtil.get(200, "查询成功",FILE_SERVER_ROOT);
+    }
     public JSONObject upload(JSONObject jsonObject){
-        String serverPath = jsonObject.getString("serverPath"); // 服务器路径
-        String[] paths = jsonObject.getString("paths").split(",");//服务器文件路径
-        String localPath = jsonObject.getString("localPath");//下载到客户端的文件路径
-        String remote = jsonObject.getString("remote"); // 客户端
-        for(String path:paths){
+        JSONArray array = jsonObject.getJSONArray("paths");
+        List<String> paths = new ArrayList<>();
+        for(int i=0;i<array.size();i++){
+            String o = array.getString(i);
+            paths.add(o);
+        }
+        String remote = jsonObject.getString("remote"); // 客户端上传的服务端路径
+        for(String fileName:paths){
             try {
-                // TODO
-                // 添加权限控制
-                // 入库记录
-                //
+                String absolutePath = FILE_SERVER_ROOT+File.separator+remote+File.separator+fileName;
+                String user = jsonObject.getString("user");
+                 String dateTime = DateUtils.getDateTime();
+                 String createdAt = dateTime;
+                String updatedAt = dateTime;
+                addFileMgrRecord(new Object[]{fileName,absolutePath,user,createdAt,updatedAt});
             } catch (Exception e) {
                 LOGGER.error(e.getMessage(),e);
             }
         }
         return ResultUtil.get(200, "发送指令成功");
     }
+
 
     public JSONObject delete(JSONObject jsonObject){
-        String[] paths = jsonObject.getString("paths").split(",");//服务器文件路径
+        JSONArray array = jsonObject.getJSONArray("paths");
+        List<String> paths = new ArrayList<>();
+        for(int i=0;i<array.size();i++){
+            String o = array.getString(i);
+            paths.add(o);
+        }
         String remote = jsonObject.getString("remote"); // 客户端
+        String user = jsonObject.getString("user");
+        List<String> absolutePaths = new ArrayList<>();
         for(String path:paths){
-            try {
-                // TODO
-                // 添加权限控制
-                // 入库记录并删除文件
-            } catch (Exception e) {
-                LOGGER.error(e.getMessage(),e);
-            }
+            String absolutePath = FILE_SERVER_ROOT+File.separator+remote+File.separator+path;
+            absolutePaths.add(absolutePath);
+        }
+
+        Map<String,Object> map =jdbcTemplate.queryForMap(String.format("select count(*) from file_mgr where absolute_path in ('%s') and owner<>'%s' and permissions<>'public'", Objects.joiner("','",absolutePaths),user));
+        int count = Integer.valueOf(Objects.getOrDefault(map," count(*)","0"));
+
+        if(count>0){
+            return ResultUtil.get(403, "存在隐私文件，不允许删除，整个操作被拒绝！");
+        }
+
+        for(String path:absolutePaths){
+            FileUtils.deleteFiles(new File(path));
         }
         return ResultUtil.get(200, "发送指令成功");
     }
@@ -98,18 +140,22 @@ public class FileService {
         JSONObject jsonObject = new JSONObject(true);
 
         JSONObject headers = new JSONObject(true);
-        headers.put("name","文件明名");
+        headers.put("name","文件名");
+        headers.put("type","文件类型");
         headers.put("size","文件大小");
         headers.put("updatedAt","最后修改时间");
-        headers.put("auth","权限");
+        headers.put("permissions","权限");
+        headers.put("owner","作者");
         jsonObject.put("headers",headers);
 
         JSONArray datas = new JSONArray();
         JSONObject up = new JSONObject();
         up.put("name",".."); // 上级目录
+        up.put("type","文件夹");
         up.put("size","");
         up.put("updatedAt", "");
-        up.put("auth", "");
+        up.put("permissions", "");
+        up.put("owner", "");
         datas.add(up);
 
 
@@ -117,9 +163,11 @@ public class FileService {
         for(File f:files){
             JSONObject object = new JSONObject(true);
             object.put("name",f.getName());
-            object.put("size",getFileSize(f));
+            object.put("type",f.isDirectory()?"文件夹":FileUtils.getSuffix(f));
+            object.put("size", FileUtils.getFileSize(f));
             object.put("updatedAt", DateUtils.getDataString(f.lastModified()));
-            object.put("auth", "公开");
+            object.put("permissions", "公开");
+            object.put("author", "");
             datas.add(object);
         }
         jsonObject.put("datas",datas);
@@ -128,22 +176,9 @@ public class FileService {
         return ret;
     }
 
-    private static String getFileSize(File file) {
-        String size = "";
-        double length = file.length();
 
-        length = length * 1.0 / 1024; // KB
-        size = DF.format(length) + "KB";
 
-        if (length > 1024) {
-            length = length / 1024; // M
-            size = DF.format(length) + "MB";
-        }
-
-        if (length > 1024) {
-            length = length / 1024; // G
-            size = DF.format(length) + "GB";
-        }
-        return size;
+    private void addFileMgrRecord(Object[] values){
+        jdbcTemplate.update("insert into file_mgr (`filename`,`absolute_path`,`owner`,`created_at`,`updated_at`) values (?,?,?,?,?)",values);
     }
 }

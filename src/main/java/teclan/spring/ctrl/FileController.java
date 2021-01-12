@@ -85,7 +85,8 @@ public class FileController {
 
         String json = HttpTool.readJSONString(request);
         JSONObject parameter = JSON.parseObject(json);
-
+        parameter.put("user",request.getHeader("user"));
+        parameter.put("tunnel",request.getHeader("tunnel"));
         return fileService.download(parameter);
     }
 
@@ -94,6 +95,7 @@ public class FileController {
     public JSONObject upload(HttpServletRequest request, HttpServletResponse response) throws Exception {
         String json = HttpTool.readJSONString(request);
         JSONObject parameter = JSON.parseObject(json);
+        parameter.put("user",request.getHeader("user"));
         return fileService.upload(parameter);
     }
 
@@ -102,7 +104,14 @@ public class FileController {
     public JSONObject delete(HttpServletRequest request, HttpServletResponse response) throws Exception {
         String json = HttpTool.readJSONString(request);
         JSONObject parameter = JSON.parseObject(json);
-        return fileService.upload(parameter);
+        parameter.put("user",request.getHeader("user"));
+        return fileService.delete(parameter);
+    }
+
+    @RequestMapping(value = "/root", method = RequestMethod.GET)
+    @ResponseBody
+    public JSONObject root(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        return fileService.root();
     }
 
     public static String saveFiles( MultipartFile file) {

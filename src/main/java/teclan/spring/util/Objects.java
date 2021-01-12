@@ -100,7 +100,7 @@ public class Objects {
 		return keys;
 	}
 
-	public static String Joiner(String separator, List<String> collection) {
+	public static String joiner(String separator, List<String> collection) {
 
 		if (collection.isEmpty() || collection.size() == 0) {
 			return "";
@@ -121,7 +121,7 @@ public class Objects {
 		return result.substring(0, result.length() - separator.length());
 	}
 
-	public static String Joiner(String separator, String[] collection) {
+	public static String joiner(String separator, String[] collection) {
 
 		if (collection.length == 0) {
 			return "";
@@ -141,7 +141,7 @@ public class Objects {
 		return result.substring(0, result.length() - separator.length());
 	}
 	
-	public static String Joiner(String separator,JSONArray collection) {
+	public static String joiner(String separator,JSONArray collection) {
 
 		if (collection.size() == 0) {
 			return "";
@@ -161,7 +161,41 @@ public class Objects {
 		return result.substring(0, result.length() - separator.length());
 	}
 
-	public static String Joiner(String separator, Set<String> collection) {
+	public static String join(String separator, String[] array) {
+
+		if (array.length == 0) {
+			return "";
+		}
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < array.length - 1; i++) {
+			sb.append(array[i]).append(separator);
+		}
+		sb.append(array[array.length - 1]);
+		return sb.toString();
+	}
+
+	public static String join(String separator, Set<String> collection) {
+
+		if (collection.isEmpty() || collection.size() == 0) {
+			return "";
+		}
+
+		StringBuffer sb = new StringBuffer();
+
+		if (collection.size() == 1) {
+			return collection.iterator().next();
+		} else {
+			Iterator<String> iterator = collection.iterator();
+			while (iterator.hasNext()) {
+				sb.append(iterator.next()).append(separator);
+			}
+		}
+		String result = sb.toString();
+
+		return result.substring(0, result.length() - separator.length());
+	}
+
+	public static String join(String separator, List<String> collection) {
 
 		if (collection.isEmpty() || collection.size() == 0) {
 			return "";
@@ -355,4 +389,17 @@ public class Objects {
 		return newValue;
 
 	}
+
+	public static String getOrDefault(Map<String, Object> map, String key, String def) {
+		if (map == null || !map.containsKey(key) || map.get(key) == null) {
+			return def;
+		}
+		String value = map.get(key).toString();
+		return value;
+	}
+
+	public static String getOrDefault(Map map, String key) {
+		return getOrDefault(map, key, "");
+	}
+
 }

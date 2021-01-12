@@ -55,7 +55,7 @@ public class AbstractDao {
             placeholders.add("?");
         }
 
-        queryObject.setSql(String.format("insert into %s (%s) values (%s)",tableName, Objects.Joiner(",",colomus),Objects.Joiner(",",placeholders)));
+        queryObject.setSql(String.format("insert into %s (%s) values (%s)",tableName, Objects.join(",",colomus),Objects.join(",",placeholders)));
         queryObject.setValues(values);
 
         return queryObject;

@@ -30,7 +30,7 @@ public class FileMgrDao extends AbstractDao implements Dao{
 
     @Override
     public Integer deleteBatch(String[] ids) {
-        return  jdbcTemplate.update(String.format("select * from file_mgr where id in ('%s')", Objects.Joiner("','",ids)));
+        return  jdbcTemplate.update(String.format("select * from file_mgr where id in ('%s')", Objects.join("','",ids)));
     }
 
     @Override

@@ -6,7 +6,7 @@ CREATE TABLE `file_mgr` (
   `owner` varchar(32) comment '所有者',
   `created_at` varchar(20) comment '创建时间',
   `updated_at` varchar(20) comment '最后修改时间',
-  `authorize` varchar(10)  comment '权限'
+  `permissions` varchar(10)  comment '权限'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 

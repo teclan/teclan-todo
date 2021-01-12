@@ -9,6 +9,7 @@ CREATE TABLE `user_info` (
   `role` varchar(32) comment '角色，superadmin/admin/general:超级管理员/管理员/普通用户',
   `limited_period_from` datetime comment '证件有效期起始时间',
   `limited_period_to` datetime comment '证件有效期截止时间',
+  `account_period_to` datetime comment '账户有效期截止时间',
   `token` varchar(32) comment 'token',
   `last_time` datetime comment '最后操作时间',
   `create_time` datetime comment '创建时间'
