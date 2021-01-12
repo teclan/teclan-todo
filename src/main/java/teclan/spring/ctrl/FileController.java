@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import teclan.spring.service.FileService;
+import teclan.spring.util.HttpTool;
 import teclan.spring.util.ResultUtil;
 
 import javax.servlet.http.HttpServletRequest;
@@ -63,21 +64,46 @@ public class FileController {
     }
 
 
-    @RequestMapping(value = "/upload", method = RequestMethod.POST)
+    @Deprecated
+    @RequestMapping(value = "/upload1", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject fileUpload(HttpServletRequest request, HttpServletResponse response, @RequestParam("file") MultipartFile file) throws Exception {
         saveFiles(file);
         return ResultUtil.get(200, "上传成功");
-
     }
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     @ResponseBody
     public JSONObject list(HttpServletRequest request, HttpServletResponse response, @RequestParam("path") String path) throws Exception {
         return fileService.list(path);
-
     }
 
+
+    @RequestMapping(value = "/download", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject download(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        String json = HttpTool.readJSONString(request);
+        JSONObject parameter = JSON.parseObject(json);
+
+        return fileService.download(parameter);
+    }
+
+    @RequestMapping(value = "/upload", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject upload(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        String json = HttpTool.readJSONString(request);
+        JSONObject parameter = JSON.parseObject(json);
+        return fileService.upload(parameter);
+    }
+
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject delete(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        String json = HttpTool.readJSONString(request);
+        JSONObject parameter = JSON.parseObject(json);
+        return fileService.upload(parameter);
+    }
 
     public static String saveFiles( MultipartFile file) {
             // 保存文件
