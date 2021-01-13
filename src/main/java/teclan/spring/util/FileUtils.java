@@ -121,11 +121,11 @@ public class FileUtils {
 
     public static String afterFormatFilePath(String abp){
 
-        while (abp.indexOf("\\")>0){
+        while (abp.indexOf("\\")>=0){
             abp = abp.replace("\\","/");
         }
 
-        while (abp.indexOf("//")>0){
+        while (abp.indexOf("//")>=0){
             abp = abp.replace("//","/");
         }
         return abp;
