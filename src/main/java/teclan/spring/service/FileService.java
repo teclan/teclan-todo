@@ -13,6 +13,7 @@ import teclan.spring.util.*;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -161,13 +162,16 @@ public class FileService {
 
         File[] files = file.listFiles();
         for(File f:files){
+
+            Map<String,String> map = getAuthorAndPermisson(FileUtils.afterFormatFilePath(f.getAbsolutePath()));
+
             JSONObject object = new JSONObject(true);
             object.put("name",f.getName());
             object.put("type",f.isDirectory()?"文件夹":FileUtils.getSuffix(f));
             object.put("size", FileUtils.getFileSize(f));
             object.put("updatedAt", DateUtils.getDataString(f.lastModified()));
-            object.put("permissions", "公开");
-            object.put("author", "");
+            object.put("permissions", Objects.getOrDefault(map,"permissions"));
+            object.put("owner", Objects.getOrDefault(map,"author"));
             datas.add(object);
         }
         jsonObject.put("datas",datas);
@@ -177,6 +181,26 @@ public class FileService {
     }
 
 
+    private Map<String,String> getAuthorAndPermisson(String abp){
+        String author= "";
+        String permissions= "";
+        Map<String,String> map = new HashMap<>();
+        List<Map<String,Object>>  list = jdbcTemplate.queryForList(String.format("select t1.owner ,t2.name,t1.permissions,t3.cname permissions_displayname \n" +
+                "from file_mgr t1  \n" +
+                "left join user_info t2 on t2.account = t1.owner \n" +
+                "left join (select * from s_dic where opttype ='AUTHORIZE') t3 on t3.ename = t1.permissions \n" +
+                "where t1.absolute_path ='%s' ",abp));
+
+        if(list.size()!=0){
+            Map<String,Object> m = list.get(0);
+            author = Objects.getOrDefault(m,"name");
+            permissions  = Objects.getOrDefault(m,"permissions_displayname");
+        }
+
+        map.put("author",author);
+        map.put("permissions",permissions);
+        return map;
+    }
     /**
      * 将文件设为隐私，文件所有者必须为自己本人
      * @param jsonObject
