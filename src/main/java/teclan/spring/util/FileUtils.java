@@ -114,7 +114,7 @@ public class FileUtils {
                 abps.addAll(getFileLis(f));
             }
         }
-        abps.add(file.getAbsolutePath());
+        abps.add(afterFormatFilePath(file.getAbsolutePath()));
 
         return abps;
     }

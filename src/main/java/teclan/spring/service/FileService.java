@@ -207,26 +207,20 @@ public class FileService {
      * @return
      */
     public JSONObject setPrivate(JSONObject jsonObject){
-        JSONArray array = jsonObject.getJSONArray("paths");
-        List<String> paths = new ArrayList<>();
-        for(int i=0;i<array.size();i++){
-            String o = array.getString(i);
-            paths.add(o);
-        }
-        String remote = jsonObject.getString("remote");
+
+        String path =jsonObject.getString("path");
         String user = jsonObject.getString("user");
         List<String> absolutePaths = new ArrayList<>();
-        for(String path:paths){
-            String absolutePath = FILE_SERVER_ROOT+"/"+remote+"/"+path;
-            absolutePaths.addAll(FileUtils.getFileLis(new File(absolutePath)));
-        }
+        absolutePaths.addAll(FileUtils.getFileLis(new File(path)));
 
         Map<String,Object> map =jdbcTemplate.queryForMap(String.format("select count(*) from file_mgr where absolute_path in ('%s') and owner='%s'", Objects.joiner("','",absolutePaths),user));
-        int count = Integer.valueOf(Objects.getOrDefault(map," count(*)","0"));
+        int count = Integer.valueOf(Objects.getOrDefault(map,"count(*)","0"));
 
         if(count!=absolutePaths.size()){
             return ResultUtil.get(403, "只能对本人上传的文件设置为隐私，当前选中文件中存在非本人文件，整个操作被拒绝！");
         }
+
+        jdbcTemplate.update(String.format("update file_mgr set permissions='private' where absolute_path in ('%s') and owner='%s'", Objects.joiner("','",absolutePaths),user));
 
         return ResultUtil.get(200, "设置成功");
     }
@@ -238,26 +232,19 @@ public class FileService {
      * @return
      */
     public JSONObject setPublic(JSONObject jsonObject){
-        JSONArray array = jsonObject.getJSONArray("paths");
-        List<String> paths = new ArrayList<>();
-        for(int i=0;i<array.size();i++){
-            String o = array.getString(i);
-            paths.add(o);
-        }
-        String remote = jsonObject.getString("remote");
+        String path =jsonObject.getString("path");
         String user = jsonObject.getString("user");
         List<String> absolutePaths = new ArrayList<>();
-        for(String path:paths){
-            String absolutePath = FILE_SERVER_ROOT+"/"+remote+"/"+path;
-            absolutePaths.addAll(FileUtils.getFileLis(new File(absolutePath)));
-        }
+        absolutePaths.addAll(FileUtils.getFileLis(new File(path)));
 
         Map<String,Object> map =jdbcTemplate.queryForMap(String.format("select count(*) from file_mgr where absolute_path in ('%s') and owner='%s'", Objects.joiner("','",absolutePaths),user));
-        int count = Integer.valueOf(Objects.getOrDefault(map," count(*)","0"));
+        int count = Integer.valueOf(Objects.getOrDefault(map,"count(*)","0"));
 
         if(count!=absolutePaths.size()){
-            return ResultUtil.get(403, "只能对本人上传的文件设置为公开，当前选中文件中存在非本人文件，整个操作被拒绝！");
+            return ResultUtil.get(403, "只能对本人上传的文件设置为隐私，当前选中文件中存在非本人文件，整个操作被拒绝！");
         }
+
+        jdbcTemplate.update(String.format("update file_mgr set permissions='public' where absolute_path in ('%s') and owner='%s'", Objects.joiner("','",absolutePaths),user));
 
         return ResultUtil.get(200, "设置成功");
     }
