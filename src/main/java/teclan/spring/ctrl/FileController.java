@@ -114,6 +114,24 @@ public class FileController {
         return fileService.root();
     }
 
+    @RequestMapping(value = "/setPrivate", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject setPrivate(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        String json = HttpTool.readJSONString(request);
+        JSONObject parameter = JSON.parseObject(json);
+        parameter.put("user",request.getHeader("user"));
+        return fileService.setPrivate(parameter);
+    }
+
+    @RequestMapping(value = "/setPublic", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject setPublic(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        String json = HttpTool.readJSONString(request);
+        JSONObject parameter = JSON.parseObject(json);
+        parameter.put("user",request.getHeader("user"));
+        return fileService.setPublic(parameter);
+    }
+
     public static String saveFiles( MultipartFile file) {
             // 保存文件
             try {

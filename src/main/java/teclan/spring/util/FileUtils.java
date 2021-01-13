@@ -7,6 +7,10 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class FileUtils {
     private static final Logger LOGGER = LoggerFactory.getLogger(FileUtils.class);
@@ -88,11 +92,42 @@ public class FileUtils {
 
     public static String getSuffix(File file) {
         String fileName = file.getName();
-        LOGGER.info("即将解析文件类型:{}",fileName);
+        LOGGER.debug("即将解析文件类型:{}",fileName);
         String suffix = "未知";
         if (fileName.lastIndexOf(".") > 0) {
             suffix = fileName.substring(fileName.lastIndexOf("."));
         }
         return suffix;
+    }
+
+    public static Set<String> getFileLis(File file){
+
+        Set<String> abps = new HashSet<>();
+
+        if (!file.exists()){
+            return abps;
+        }
+
+        if(file.isDirectory()){
+            File[] files = file.listFiles();
+            for(File f:files){
+                abps.addAll(getFileLis(f));
+            }
+        }
+        abps.add(file.getAbsolutePath());
+
+        return abps;
+    }
+
+    public static String afterFormatFilePath(String abp){
+
+        while (abp.indexOf("\\")>0){
+            abp = abp.replace("\\","/");
+        }
+
+        while (abp.indexOf("//")>0){
+            abp = abp.replace("//","/");
+        }
+        return abp;
     }
 }

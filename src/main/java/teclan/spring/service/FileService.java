@@ -44,7 +44,7 @@ public class FileService {
         String tunnel = jsonObject.getString("tunnel");
         List<String> absolutePaths = new ArrayList<>();
         for(String path:paths){
-            String absolutePath = FILE_SERVER_ROOT+File.separator+remote+File.separator+path;
+            String absolutePath = FILE_SERVER_ROOT+"/"+remote+"/"+path;
             absolutePaths.add(absolutePath);
         }
 
@@ -57,7 +57,7 @@ public class FileService {
 
         for(String path:paths){
             try {
-                FileServer.push(tunnel,FILE_SERVER_ROOT+File.separator+remote,local,path );
+                FileServer.push(tunnel,FILE_SERVER_ROOT+"/"+remote,local,path );
             } catch (Exception e) {
                 LOGGER.error(e.getMessage(),e);
             }
@@ -80,7 +80,7 @@ public class FileService {
         String remote = jsonObject.getString("remote"); // 客户端上传的服务端路径
         for(String fileName:paths){
             try {
-                String absolutePath = FILE_SERVER_ROOT+File.separator+remote+File.separator+fileName;
+                String absolutePath = FileUtils.afterFormatFilePath(remote+"/"+fileName);
                 String user = jsonObject.getString("user");
                  String dateTime = DateUtils.getDateTime();
                  String createdAt = dateTime;
@@ -105,7 +105,7 @@ public class FileService {
         String user = jsonObject.getString("user");
         List<String> absolutePaths = new ArrayList<>();
         for(String path:paths){
-            String absolutePath = FILE_SERVER_ROOT+File.separator+remote+File.separator+path;
+            String absolutePath = FILE_SERVER_ROOT+"/"+remote+"/"+path;
             absolutePaths.add(absolutePath);
         }
 
@@ -128,7 +128,7 @@ public class FileService {
         if("/".equals(path)){
             abPath = propertyconfigUtil.getValue("file_root_dir");
         }else {
-            abPath = propertyconfigUtil.getValue("file_root_dir")+File.separator+path;
+            abPath = propertyconfigUtil.getValue("file_root_dir")+"/"+path;
         }
 
         File file = new File(abPath);
@@ -174,6 +174,68 @@ public class FileService {
          JSONObject ret = ResultUtil.get(200, "获取成功",jsonObject);
         LOGGER.info("获取文件列表返回:{}",ret);
         return ret;
+    }
+
+
+    /**
+     * 将文件设为隐私，文件所有者必须为自己本人
+     * @param jsonObject
+     * @return
+     */
+    public JSONObject setPrivate(JSONObject jsonObject){
+        JSONArray array = jsonObject.getJSONArray("paths");
+        List<String> paths = new ArrayList<>();
+        for(int i=0;i<array.size();i++){
+            String o = array.getString(i);
+            paths.add(o);
+        }
+        String remote = jsonObject.getString("remote");
+        String user = jsonObject.getString("user");
+        List<String> absolutePaths = new ArrayList<>();
+        for(String path:paths){
+            String absolutePath = FILE_SERVER_ROOT+"/"+remote+"/"+path;
+            absolutePaths.addAll(FileUtils.getFileLis(new File(absolutePath)));
+        }
+
+        Map<String,Object> map =jdbcTemplate.queryForMap(String.format("select count(*) from file_mgr where absolute_path in ('%s') and owner='%s'", Objects.joiner("','",absolutePaths),user));
+        int count = Integer.valueOf(Objects.getOrDefault(map," count(*)","0"));
+
+        if(count!=absolutePaths.size()){
+            return ResultUtil.get(403, "只能对本人上传的文件设置为隐私，当前选中文件中存在非本人文件，整个操作被拒绝！");
+        }
+
+        return ResultUtil.get(200, "设置成功");
+    }
+
+
+    /**
+     * 将文件设为公开，文件所有者必须为自己本人
+     * @param jsonObject
+     * @return
+     */
+    public JSONObject setPublic(JSONObject jsonObject){
+        JSONArray array = jsonObject.getJSONArray("paths");
+        List<String> paths = new ArrayList<>();
+        for(int i=0;i<array.size();i++){
+            String o = array.getString(i);
+            paths.add(o);
+        }
+        String remote = jsonObject.getString("remote");
+        String user = jsonObject.getString("user");
+        List<String> absolutePaths = new ArrayList<>();
+        for(String path:paths){
+            String absolutePath = FILE_SERVER_ROOT+"/"+remote+"/"+path;
+            absolutePaths.addAll(FileUtils.getFileLis(new File(absolutePath)));
+        }
+
+        Map<String,Object> map =jdbcTemplate.queryForMap(String.format("select count(*) from file_mgr where absolute_path in ('%s') and owner='%s'", Objects.joiner("','",absolutePaths),user));
+        int count = Integer.valueOf(Objects.getOrDefault(map," count(*)","0"));
+
+        if(count!=absolutePaths.size()){
+            return ResultUtil.get(403, "只能对本人上传的文件设置为公开，当前选中文件中存在非本人文件，整个操作被拒绝！");
+        }
+
+        return ResultUtil.get(200, "设置成功");
     }
 
 
