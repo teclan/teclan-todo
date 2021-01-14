@@ -46,12 +46,12 @@ public class FileMgrDao extends AbstractDao implements Dao{
     @Override
     public List<Map<String, Object>> query(Map<String, Object> parameter) {
         parameter.put("opttype","AUTHORIZE");
-        return jdbcTemplate.queryForList("select t1.*,t2.cname authorize_display,t3.name owner_dispay from file_mgr t1 inner join s_dic t2 on t1.authorize=t2.ename inner join user_info t3 on t3.account=t1.owner "+ transform4Query(parameter));
+        return jdbcTemplate.queryForList("select t1.*,t2.cname authorize_display,t3.name owner_dispay from file_mgr t1 inner join s_dic t2 on t1.permissions=t2.ename inner join user_info t3 on t3.account=t1.owner "+ transform4Query(parameter));
     }
 
     @Override
     public Integer countQuery(Map<String, Object> parameter) {
         parameter.put("opttype","AUTHORIZE");
-        return jdbcTemplate.queryForObject("select COUNT(*) from file_mgr t1 inner join s_dic t2 on t1.authorize=t2.ename inner join user_info t3 on t3.account=t1.owner "+ transform4Count(parameter),Integer.class);
+        return jdbcTemplate.queryForObject("select COUNT(*) from file_mgr t1 inner join s_dic t2 on t1.permissions=t2.ename inner join user_info t3 on t3.account=t1.owner "+ transform4Count(parameter),Integer.class);
     }
 }
