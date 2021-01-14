@@ -38,9 +38,6 @@ function query(currentPage){
                                 tr+='<td> '+val.updated_at+' </td>';
                                 tr+='<td> '+val.owner_dispay+' </td>';
                                 tr+='<td> '+val.authorize_display+' </td>';
-                                tr+='<td class="active text-left" style="width: 200px;"> '
-                                    +'<button class="btn btn-default" type="button" data="'+val.id+'" onclick="del(this)">删除</button> '
-                                    +' </td>';
                                 tr+='</tr>';
 
                                 tableContent+=tr;
