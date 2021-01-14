@@ -142,18 +142,25 @@ public class UserController {
             String json = HttpTool.readJSONString(request);
             JSONObject parameter = JSON.parseObject(json);
 
-            String id = parameter.getString("id");
+            String account = parameter.getString("account");
+            String password = parameter.getString("password");
             String name = parameter.getString("name");
             String phone = parameter.getString("phone");
             String idCard = parameter.getString("id_card");
+            
+            
+            Integer count =  jdbcTemplate.queryForObject(String.format("select count(*) from user_info where account='%s'",account),Integer.class);
 
+            if(count!=0){
+                return ResultUtil.get(500, "添加失败,账号重复");
+            }
 
-            int row = jdbcTemplate.update("insert into user_info (id,code,name,phone,id_card) values (?,?,?,?,?) ",id,id,name,phone,idCard);
+            int row = jdbcTemplate.update("insert into user_info (account,name,password,phone,id_card) values (?,?,?,?,?) ",account,name,password,phone,idCard);
 
             if(row>0){
                 return ResultUtil.get(200, "添加成功");
             }else{
-                return ResultUtil.get(403, "添加失败");
+                return ResultUtil.get(500, "添加失败");
             }
 
         } catch (Exception e) {

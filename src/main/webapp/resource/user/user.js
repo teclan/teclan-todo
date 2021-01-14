@@ -92,6 +92,6 @@ function doUpdate(json){
 };
 
 function doAdd(json){
-     commonAdd('/user/add.do',json);
+    commonAdd('/user/add.do',json);
 };
 

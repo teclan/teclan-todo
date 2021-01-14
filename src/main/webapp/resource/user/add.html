@@ -39,13 +39,16 @@ function save(){
      return;
    }
 
-  var id= $('#id').val();
+  var account= $('#account').val();
   var name= $('#name').val();
+  var password= $('#password').val();
   var phone= $('#phone').val();
   var id_card= $('#id_card').val();
 
-  var json = '{"id":"'+id+'","name":"'+name+'","phone":"'+phone+'","id_card":"'+id_card+'"}';
+  var json = '{"account":"'+account+'","name":"'+name+'","password":"'+password+'","phone":"'+phone+'","id_card":"'+id_card+'"}';
   doAdd(json);
+
+
 };
 
 function check(){
@@ -72,10 +75,17 @@ function check(){
                                 }
                             }
                         },
-                        id_card: {
+                        account: {
                             validators: {
                                 notEmpty: {
-                                    message: '证件号不能为空'
+                                    message: '账号不能为空'
+                                }
+                            }
+                        },
+                        password: {
+                            validators: {
+                                notEmpty: {
+                                    message: '密码不能为空'
                                 }
                             }
                         }
@@ -102,9 +112,9 @@ function check(){
 
 
                 <div class="form-group">
-                    <label for="id" class="col-sm-2 control-label">编号：</label>
+                    <label for="account" class="col-sm-2 control-label">账号：</label>
                     <div class="col-sm-10">
-                        <input type="text" id="id" name="id" value="" class="form-control" placeholder="编号">
+                        <input type="text" id="account" name="account" value="" class="form-control" placeholder="账号（必填）">
                         <span class="form-control-feedback"></span>
                     </div>
                 </div>
@@ -113,6 +123,14 @@ function check(){
                     <label for="name" class="col-sm-2 control-label">姓名：</label>
                     <div class="col-sm-10">
                         <input type="text" id="name" name="name" value="" class="form-control" placeholder="姓名（必填）">
+                        <span class="form-control-feedback"></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password" class="col-sm-2 control-label">密码：</label>
+                    <div class="col-sm-10">
+                        <input type="text" id="password" name="password" value="" class="form-control" placeholder="密码（必填）">
                         <span class="form-control-feedback"></span>
                     </div>
                 </div>
@@ -131,7 +149,7 @@ function check(){
                 <div class="form-group">
                     <label for="id_card" class="col-sm-2 control-label">证件号：</label>
                     <div class="col-sm-10">
-                        <input type="text" id="id_card" name="id_card" value="" class="form-control" placeholder="证件号（必填）">
+                        <input type="text" id="id_card" name="id_card" value="" class="form-control" placeholder="证件号（选填）">
                         <span class="form-control-feedback"></span>
                     </div>
                 </div>
