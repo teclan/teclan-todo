@@ -150,6 +150,10 @@ public class UserController {
             String phone = parameter.getString("phone");
             String idCard = parameter.getString("id_card");
 
+            String user = request.getHeader("user");
+            if(!"admin".equals(user) && !"superadmin".equals(user) ){
+                return ResultUtil.get(403, "您不是管理员，无权限添加用户!");
+            }
 
             Integer count = jdbcTemplate.queryForObject(String.format("select count(*) from user_info where account='%s'", account), Integer.class);
 
@@ -157,7 +161,7 @@ public class UserController {
                 return ResultUtil.get(500, "添加失败,账号重复");
             }
 
-            int row = jdbcTemplate.update("insert into user_info (account,name,password,phone,id_card) values (?,?,?,?,?) ", account, name, password, phone, idCard);
+            int row = jdbcTemplate.update("insert into user_info (account,name,password,phone,id_card,role) values (?,?,?,?,?,?) ", account, name, password, phone, idCard,"general");
 
             if (row > 0) {
                 return ResultUtil.get(200, "添加成功");
