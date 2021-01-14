@@ -23,14 +23,14 @@ function query(currentPage){
                             var tableContent='';
                             $(data).each(function (index){
                                 var val=data[index];
-                                var tr='<tr class="active text-center"> ';
-                                tr+='<td> '+val.host+' </td>';
-                                tr+='<td> '+val.port+' </td>';
-                                tr+='<td> '+val.user+' </td>';
-                                tr+='<td> '+val.url+' </td>';
-                                tr+='<td> '+val.parameter+' </td>';
-                                tr+='<td> '+val.status+' </td>';
-                                tr+='<td> '+val.created_at+' </td>';
+                                var tr='<tr class="active text-left"> ';
+                                tr+='<td class="active text-left"> '+val.host+' </td>';
+                                tr+='<td class="active text-left"> '+val.port+' </td>';
+                                tr+='<td class="active text-left"> '+val.user+' </td>';
+                                tr+='<td class="active text-left"> '+val.url+' </td>';
+                                tr+='<td class="active text-left"> '+val.parameter+' </td>';
+                                tr+='<td class="active text-left" > '+val.status+' </td>';
+                                tr+='<td class="active text-left"> '+val.created_at+' </td>';
                                 tr+='</tr>';
 
                                 tableContent+=tr;

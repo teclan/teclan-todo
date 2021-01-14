@@ -5,7 +5,7 @@ var BASE_URL="/teclan-todo";
 var ROOT_URL=BASE_URL;
 
 //  全局分页大小
-var PAGE_SIZE=5;
+var PAGE_SIZE=20;
 
 // 用于编辑页面，缓存被选中行的标识
 var SELECT_ID=-1;
