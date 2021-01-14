@@ -69,6 +69,12 @@ public class UserController {
 
             String json = HttpTool.readJSONString(request);
             JSONObject parameter = JSON.parseObject(json);
+            String user = request.getHeader("user");
+            Map<String,Object> map = jdbcTemplate.queryForMap("select role from user_info where account=?",user);
+            String role = Objects.getOrDefault(map,"role");
+            if(!"admin".equals(role) && !"superadmin".equals(role) ){
+                return ResultUtil.get(403, "您不是管理员，无权限删除用户!");
+            }
 
             int id = parameter.getIntValue("id");
 
@@ -121,6 +127,12 @@ public class UserController {
             String phone = parameter.getString("phone");
             String idCard = parameter.getString("id_card");
 
+            String user = request.getHeader("user");
+            Map<String,Object> map = jdbcTemplate.queryForMap("select role from user_info where account=?",user);
+            String role = Objects.getOrDefault(map,"role");
+            if(!"admin".equals(role) && !"superadmin".equals(role) ){
+                return ResultUtil.get(403, "您不是管理员，无权限修改用户信息!");
+            }
 
             int row = jdbcTemplate.update("update user_info set name=?,phone=?,id_card=? where id=?", name, phone, idCard, id);
 
@@ -151,9 +163,12 @@ public class UserController {
             String idCard = parameter.getString("id_card");
 
             String user = request.getHeader("user");
-            if(!"admin".equals(user) && !"superadmin".equals(user) ){
+            Map<String,Object> map = jdbcTemplate.queryForMap("select role from user_info where account=?",user);
+            String role = Objects.getOrDefault(map,"role");
+            if(!"admin".equals(role) && !"superadmin".equals(role) ){
                 return ResultUtil.get(403, "您不是管理员，无权限添加用户!");
             }
+
 
             Integer count = jdbcTemplate.queryForObject(String.format("select count(*) from user_info where account='%s'", account), Integer.class);
 
@@ -179,6 +194,7 @@ public class UserController {
     @ResponseBody
     public JSONObject changepwd(HttpServletRequest request, HttpServletResponse response) {
         try {
+
             String json = HttpTool.readJSONString(request);
             JSONObject parameter = JSON.parseObject(json);
             String account = parameter.getString("account");
