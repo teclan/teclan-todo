@@ -7,7 +7,7 @@
   {"id": "filemgr","name": "文件管理","dropdown": false,"url": "/resource/filemgr/fileList.html"},
   {"id": "avatar","name": "个人中心","dropdown": true,"url": "#",
                   "dropdown_items":[
-                    {"id": "profile","name": "个人资料","dropdown": false,"url":""},
+                    {"id": "profile","name": "密码修改","dropdown": false,"url":"/resource/password/change.html"},
                     {"id": "logout","name": "登   出","dropdown": false,"url":"/"}]
   }
 ]

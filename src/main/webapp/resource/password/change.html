@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+
+
+    <link rel="stylesheet" href="../css/common/include.css">
+
+    <script  language="javascript" type="text/javascript"  src="../js/common/include.js"></script>
+
+    <script  language="javascript" type="text/javascript"  src="../password/password.js"></script>
+
+    <title>添加用户</title>
+
+
+</head>
+<body id="body">
+
+<script type="text/javascript">
+
+    $(function () {
+        initPage();
+        check();
+        $('#password').css('font-size','25px');
+    });
+
+function save(){
+ var bootstrapValidator = $("#defaultForm").data('bootstrapValidator');
+    bootstrapValidator.resetForm();
+   bootstrapValidator.validate();
+   if(!bootstrapValidator.isValid()){
+     // 如果有验证未通过的项，给出提示，且终止后续逻辑
+     showMessageWithTimeOut('表单有验证失败的项，请先处理后再执行此操作!',3);
+
+     return;
+   }
+
+  var account= localStorage.getItem('user');
+  var old_password= $('#old_password').val();
+  var password= $('#pwd').val();
+  var password_confirm= $('#password_confirm').val();
+
+   if(password!=password_confirm){
+        showMessageWithTimeOut('新密码和确认密码不一致!',3);
+       return;
+   }
+
+    if(password==old_password){
+      showMessageWithTimeOut('新密码和旧密码一致!',3);
+      return;
+  }
+
+  var json = '{"account":"'+account+'","password":"'+password+'","old_password":"'+old_password+'"}';
+
+
+    var handleSuccess = function(response){
+        if(response !== undefined) {
+            try {
+
+                if(response.code==200){
+                    showMessageWithTimeOut('密码修改成功，服务器已注销您的登录信息，请重新登录!',5);
+                }else{
+                    showMessage(response.message);
+                }
+            } catch(e) {
+                alert("error!"+e);
+                return false;
+            }
+        }
+    };
+
+    var handleFailure = function(o){
+    };
+
+    async('POST',BASE_URL+'/user/changepwd.do',json,handleSuccess,handleFailure);
+
+};
+
+function check(){
+
+         $('#defaultForm').bootstrapValidator({
+
+                    feedbackIcons: {
+                        　　valid: 'glyphicon glyphicon-ok',
+                        　　invalid: 'glyphicon glyphicon-remove',
+                        　　validating: 'glyphicon glyphicon-refresh'
+                    },
+                    fields: {
+                        old_password: {
+                            validators: {
+                                notEmpty: {
+                                    message: '原密码不能为空'
+                                }
+                            }
+                        },
+                        password: {
+                            validators: {
+                                notEmpty: {
+                                    message: '新密码不能为空'
+                                }
+                            }
+                        },
+                        password_confirm: {
+                            validators: {
+                                notEmpty: {
+                                    message: '确认密码不能为空'
+                                }
+                            }
+                        }
+                    }
+                });
+};
+
+
+</script>
+
+<div id="navigation"></div>
+
+
+<div  class="panel panel-default" style="margin-left:150px; padding-left:40px;padding-top:10px;padding-bottom:10px;width: 1000px;">
+
+
+    <div  style="margin-left:100px; margin-top:100px; margin-right:100px; margin-bottom:60px; padding-top:10px">
+
+        <h2 class="label label-info" style="font-size:20px;">密码/修改</h2>
+
+        <div style="padding-top:30px;" >
+
+            <form id="defaultForm" class="form-horizontal">
+                <div class="form-group">
+                    <label for="old_password" class="col-sm-2 control-label">原密码：</label>
+                    <div class="col-sm-10">
+                        <input type="text" id="old_password" name="old_password" value="" class="form-control" placeholder="原密码（必填）">
+                        <span class="form-control-feedback"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="pwd" class="col-sm-2 control-label">新密码：</label>
+                    <div class="col-sm-10">
+                        <input type="password" id="pwd" name="pwd" value="" class="form-control" placeholder="新密码（必填）">
+                        <span class="form-control-feedback"></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password_confirm" class="col-sm-2 control-label">确认密码：</label>
+                    <div class="col-sm-10">
+                        <input type="password" id="password_confirm" name="password_confirm" value="" class="form-control" placeholder="确认密码（必填）">
+                        <span class="form-control-feedback"></span>
+                    </div>
+                </div>
+
+            </form>
+
+            </br>
+
+        </div>
+        <div  style="margin-left:647px;;padding-top:10px;">
+            <button type="button" class="btn btn-default" onclick="window.history.back(-1);">返回</button>
+            <button type="button" class="btn btn-default" onclick="save()">修改</button>
+
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>

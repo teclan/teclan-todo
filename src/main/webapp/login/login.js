@@ -2,12 +2,7 @@
 
 
 function register(){
-  $.globalMessenger().post({
-     message: "未开放!",
-      hideAfter: 3,
-      type: 'info'
-  });
-
+    showMessage('已限制账号注册，请向管理员申请账号!',10);
 };
 
 
