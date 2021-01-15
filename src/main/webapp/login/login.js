@@ -53,7 +53,7 @@ function login(id,password){
 
      $.ajaxSettings.async = false;
 
- 	sync('POST',BASE_URL+'/login.do',json,handleSuccess,handleFailure);
+    async('POST',BASE_URL+'/login.do',json,handleSuccess,handleFailure);
 
 };
 
@@ -67,6 +67,6 @@ function logout(){
  	 };
 
     var json = '{"account":"'+localStorage.getItem("user")+'"}';
- 	sync('POST',BASE_URL+'/logout.do',json,handleSuccess,handleFailure);
+    async('POST',BASE_URL+'/logout.do',json,handleSuccess,handleFailure);
 
 };

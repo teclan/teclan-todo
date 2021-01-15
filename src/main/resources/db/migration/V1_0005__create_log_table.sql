@@ -8,7 +8,7 @@ CREATE TABLE `log` (
   `header` varchar(2000) DEFAULT NULL comment '请求头信息',
   `parameter` text comment '参数',
   `status` varchar(32) comment '状态',
-  `result` text comment '结果',
+  `result` LONGTEXT comment '结果',
   `created_at` varchar(20) comment '创建时间'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

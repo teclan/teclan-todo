@@ -1,6 +1,7 @@
 package teclan.spring.model;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import teclan.flyway.utils.Strings;
 import teclan.spring.util.HttpTool;
 import teclan.spring.util.IdUtils;
@@ -172,6 +173,12 @@ public class Log extends Model {
 
         String parameter = HttpTool.readJSONString(httpServletRequest);
         String createdAt =sdf.format(new Date());
+
+        if(url.contains("logout.do")){
+            JSONObject jsonObject = JSONObject.parseObject(parameter);
+            user = jsonObject.getString("account");
+            header.put("user",user);
+        }
 
 
         return new Log(sessionId,host,port,header.get("user"),url,headerStr,parameter,createdAt);
