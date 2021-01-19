@@ -90,6 +90,17 @@ public class FileController {
         return fileService.download(parameter);
     }
 
+    @RequestMapping(value = "/redownload", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject reDownload(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        String json = HttpTool.readJSONString(request);
+        JSONObject parameter = JSON.parseObject(json);
+        parameter.put("user",request.getHeader("user"));
+        parameter.put("tunnel",request.getHeader("tunnel"));
+        return fileService.reDownload(parameter);
+    }
+
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject upload(HttpServletRequest request, HttpServletResponse response) throws Exception {

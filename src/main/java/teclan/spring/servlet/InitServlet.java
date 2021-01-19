@@ -7,46 +7,53 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.ContextLoader;
+import teclan.netty.handler.FileInfoHandler;
+import teclan.netty.handler.FileServerHanlder;
 import teclan.netty.service.FileServer;
 import teclan.spring.cache.GuavaCache;
 import teclan.spring.db.MySqlFlywayFactory;
+import teclan.spring.service.FileServerFileInfoHandler;
 import teclan.spring.util.PropertyConfigUtil;
 
 import java.util.Arrays;
 
-public class InitServlet extends HttpServlet{
-	
-	private static final long serialVersionUID = 142275568750796042L;
-	private final static PropertyConfigUtil propertyconfigUtil;
+public class InitServlet extends HttpServlet {
 
-	static {
-		propertyconfigUtil = PropertyConfigUtil.getInstance("config.properties");
-	}
+    private static final long serialVersionUID = 142275568750796042L;
+    private final static PropertyConfigUtil propertyconfigUtil;
 
-	private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
-	private ApplicationContext wac = ContextLoader.getCurrentWebApplicationContext();  
+    static {
+        propertyconfigUtil = PropertyConfigUtil.getInstance("config.properties");
+    }
 
-	@Override
-	public void init() throws ServletException {
-		super.init();
-		try {
-			LOGGER.info("\n==============================程序自检开始..\n\n");
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+    private ApplicationContext wac = ContextLoader.getCurrentWebApplicationContext();
 
-			new MySqlFlywayFactory().flyway();
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        try {
+            LOGGER.info("\n==============================程序自检开始..\n\n");
 
-			GuavaCache.init();
+            new MySqlFlywayFactory().flyway();
 
-			new Thread(new Runnable() {
-				@Override
-				public void run() {
-					new FileServer().run(propertyconfigUtil.getIntValue("fileServierPort"));
-				}
-			}).start();
+            GuavaCache.init();
 
-			LOGGER.info("\n==============================程序自检结束..\n\n");
-		}catch (Exception e){
-			LOGGER.error(e.getMessage(),e);
-			System.exit(0);
-		}
-	}
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+
+                    FileServerFileInfoHandler fileServerFileInfoHandler = (FileServerFileInfoHandler) wac.getBean(FileServerFileInfoHandler.class);
+                    FileServer fileServer = new FileServer();
+                    FileServerHanlder.setFileInfoHandler(fileServerFileInfoHandler);
+                    fileServer.run(propertyconfigUtil.getIntValue("fileServierPort"));
+                }
+            }).start();
+
+            LOGGER.info("\n==============================程序自检结束..\n\n");
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage(), e);
+            System.exit(0);
+        }
+    }
 }

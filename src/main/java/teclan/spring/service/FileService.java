@@ -32,6 +32,31 @@ public class FileService {
         FILE_SERVER_ROOT = propertyconfigUtil.getValue("file_root_dir");
     }
 
+
+    public JSONObject reDownload(JSONObject jsonObject){
+        String tunnel = jsonObject.getString("tunnel");
+        String id = jsonObject.getString("id");
+
+        Map<String,Object> map =jdbcTemplate.queryForMap(String.format("select src,dst from file_push where id =?", id));
+        String src = Objects.getOrDefault(map,"src");
+        String dst = Objects.getOrDefault(map,"dst");
+
+        File file = new File(src);
+        if(!file.exists()){
+            LOGGER.warn("客户端请求重复下载，但文件不存在...{}",src);
+           return ResultUtil.get(500, "服务器未找到对应文件");
+        }
+
+        try {
+            FileServer.push(tunnel,src,dst,file.getName());
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage(),e);
+        }
+
+        return ResultUtil.get(200, "发送指令成功");
+    }
+
+
     public JSONObject download(JSONObject jsonObject){
         JSONArray array = jsonObject.getJSONArray("paths");
         List<String> paths = new ArrayList<>();
