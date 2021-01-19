@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import teclan.netty.handler.AbstractFileInfoHandler;
+import teclan.netty.handler.FileServerHanlder;
 import teclan.netty.model.FileInfo;
 import teclan.netty.model.PackageType;
 import teclan.netty.service.FileServer;
@@ -31,24 +32,9 @@ public class FileServerFileInfoHandler extends AbstractFileInfoHandler {
 
     @Override
     public void writeFail(FileInfo fileInfo) throws Exception {
+        fileInfo.setPackageType(PackageType.CMD_NEED_REPEAT);
+        send(FileServerHanlder.getClinetInfos(fileInfo.getRouter()),fileInfo);
         LOGGER.info("接收文件失败,请求重发:{}",fileInfo);
-
-        Map<String,Object> map =jdbcTemplate.queryForMap(String.format("select remote,src,dst from file_push where id =?", fileInfo.getId()));
-        String remote = Objects.getOrDefault(map,"remote");
-        String src = Objects.getOrDefault(map,"src");
-        String dst = Objects.getOrDefault(map,"dst");
-
-        File file = new File(src);
-        if(!file.exists()){
-            LOGGER.warn("客户端请求重复下载，但文件不存在...{}",src);
-            return;
-        }
-
-        try {
-            FileServer.push(remote,src,dst,file.getName());
-        } catch (Exception e) {
-            LOGGER.error(e.getMessage(),e);
-        }
-
     }
+
 }
