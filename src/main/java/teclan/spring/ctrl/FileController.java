@@ -14,6 +14,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
+import teclan.netty.config.Config;
+import teclan.netty.handler.FileServerHanlder;
 import teclan.spring.service.FileService;
 import teclan.spring.util.HttpTool;
 import teclan.spring.util.ResultUtil;
@@ -99,6 +101,16 @@ public class FileController {
         parameter.put("user",request.getHeader("user"));
         parameter.put("tunnel",request.getHeader("tunnel"));
         return fileService.reDownload(parameter);
+    }
+
+    @RequestMapping(value = "/slice", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject slice(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        JSONObject jsonObject = new JSONObject();
+        int size = FileServerHanlder.getClinetInfos().size();
+        size = size == 0 ? 1 : size;
+        jsonObject.put("slice", Config.SLICE / size);
+        return ResultUtil.get(200, "查询成功",jsonObject);
     }
 
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
