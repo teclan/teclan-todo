@@ -70,8 +70,11 @@ public class FileService {
         String tunnel = jsonObject.getString("tunnel");
         List<String> absolutePaths = new ArrayList<>();
         for(String path:paths){
-            String absolutePath = FILE_SERVER_ROOT+"/"+remote+"/"+path;
-            absolutePaths.add(absolutePath);
+            File file = new File(remote + File.separator + path);
+            if (!file.exists()) {
+                return ResultUtil.get(500, "文件不存在:"+path);
+            }
+            absolutePaths.add(FileUtils.afterFormatFilePath(file.getAbsolutePath()));
         }
 
         Map<String,Object> map =jdbcTemplate.queryForMap(String.format("select count(*) from file_mgr where absolute_path in ('%s') and owner<>'%s' and permissions<>'public'", Objects.joiner("','",absolutePaths),user));
@@ -81,13 +84,18 @@ public class FileService {
             return ResultUtil.get(403, "存在隐私文件，不允许下载，整个操作被拒绝！");
         }
 
-        for(String path:paths){
-            try {
-                FileServer.push(tunnel,FILE_SERVER_ROOT+"/"+remote,local,path );
-            } catch (Exception e) {
-                LOGGER.error(e.getMessage(),e);
-            }
-        }
+      new Thread(new Runnable() {
+          @Override
+          public void run() {
+              for(String path:paths){
+                  try {
+                      FileServer.push(tunnel,remote,local,path );
+                  } catch (Exception e) {
+                      LOGGER.error(e.getMessage(),e);
+                  }
+              }
+          }
+      }).start();
 
         return ResultUtil.get(200, "发送指令成功");
     }

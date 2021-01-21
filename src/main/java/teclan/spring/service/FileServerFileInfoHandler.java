@@ -27,7 +27,7 @@ public class FileServerFileInfoHandler extends AbstractFileInfoHandler {
     @Override
     public void push(String remote,FileInfo fileInfo) throws Exception {
         LOGGER.info("推送文件:{}",fileInfo);
-        jdbcTemplate.update("insert into file_push (`id`,`remote`,``src`,`dst`) values (?,?,?,?)", fileInfo.getId(), remote,FileUtils.afterFormatFilePath(fileInfo.getSrcFileName()),FileUtils.afterFormatFilePath(fileInfo.getDstFileName()));
+        jdbcTemplate.update("insert into file_push (`id`,`remote`,`src`,`dst`) values (?,?,?,?)", fileInfo.getId(), remote,FileUtils.afterFormatFilePath(fileInfo.getSrcFileName()),FileUtils.afterFormatFilePath(fileInfo.getDstFileName()));
     }
 
     @Override
